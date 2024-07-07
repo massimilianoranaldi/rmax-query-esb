@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice e Pagina di Riferimento con Tabella Editabile</title>
+    <style>
+        .query-section {
+            font-size: 14px;
+            font-family: monospace;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .query-section code {
+            color: blue;
+        }
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indice</h1>
+        <nav>
+            <ul id="indice">
+                <!-- Contenuto dell'indice verrà generato dinamicamente qui -->
+            </ul>
+        </nav>
+    </header>
+
+    <main id="contenuti">
+        <!-- Contenuto della pagina di riferimento verrà generato dinamicamente qui -->
+    </main>
+
+    <footer>
+        <h2>Inserisci i dati nel formato CSV con TAB come separatore</h2>
+        <textarea id="input-csv" rows="5" cols="50" placeholder="Inserisci i dati CSV qui..."></textarea>
+        <button onclick="aggiungiTabella()">Aggiungi Tabella</button>
+    </footer>
+
+    <script>
+        // Funzione per aggiungere una tabella HTML basata sui dati CSV forniti dall'utente
+        function aggiungiTabella() {
+            var inputCSV = document.getElementById('input-csv').value.trim();
+            var tableHtml = csvToTable(inputCSV);
+            var contenuti = document.getElementById('contenuti');
+            var nuovaSezione = document.createElement('section');
+            nuovaSezione.className = 'query-section';
+            nuovaSezione.innerHTML = tableHtml;
+            contenuti.appendChild(nuovaSezione);
+        }
+
+        // Funzione per trasformare il CSV con TAB come separatore in una tabella HTML
+        function csvToTable(csv) {
+            var lines = csv.split("\n");
+            var tableHtml = "<table border='1'>";
+            lines.forEach(function(line, index) {
+                var cells = line.split("\t"); // Utilizza il TAB come separatore
+                var rowHtml = "<tr>";
+                cells.forEach(function(cell, cellIndex) {
+                    if (index === 0) { // Se si tratta della prima riga
+                        rowHtml += "<th style='background-color: lightblue; font-weight: bold;'>" + cell.trim() + "</th>";
+                    } else {
+                        rowHtml += "<td>" + cell.trim() + "</td>";
+                    }
+                });
+                rowHtml += "</tr>";
+                tableHtml += rowHtml;
+            });
+            tableHtml += "</table>";
+            return tableHtml;
+        }
+    </script>
+</body>
+</html>

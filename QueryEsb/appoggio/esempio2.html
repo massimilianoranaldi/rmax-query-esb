@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Code Examples</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .code {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            position: relative;
+            font-size: 90%;
+            color: blue;
+            font-style: italic;
+        }
+        .output {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 3px solid #ccc;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#chapter1">ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM</a></li>
+            <ul>
+                <li><a href="#subchapter1">Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</a></li>
+            </ul>
+            <li><a href="#chapter2">ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium</a></li>
+            <li><a href="#chapter3">ESTRAZIONE EMF ACTION</a></li>
+            <li><a href="#chapter4">ESTRAZIONE TIED</a></li>
+            <li><a href="#chapter5">QUERY DISCARD</a></li>
+        </ul>
+    </nav>
+
+    <div class="chapter" id="chapter1">
+        <h2>ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM</h2>
+        <p>Database di riferimento: DB: 10.55.207.217, porta: 1567 , Service Name: BWKp_PDB</p>
+        <div class="subchapter" id="subchapter1">
+            <h3>Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</h3>
+            <div class="code">
+                <button class="copy-button" onclick="copyToClipboard('code1')">Copia</button>
+                <pre id="code1">
+                    <code>
+                        <span style="font-size: 85%; color: blue; font-style: italic;">
+                        -- Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)
+                        select --am.*,
+                        r.id,r.status,r.name,r.ts_created,
+                        extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+                        extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+                        extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+                        extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+                        extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+                        (select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+                        (case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)>=1 then 'Y' else 'N' end) as Logistica,
+                        (SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+                        (SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+                        (SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+                        (SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss,
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/@componentRoot','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentRoot
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdTe
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/@sottoTipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') sottoTipote
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/@componentPadre','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentPadrete
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+                        ,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+                        ,r.id
+                        from action r, request rr ,action_msg am,
+                        TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TC'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) pp    
+                        ,TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TE'' and @sottoTipo="MNPIN"]','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) te    
+                        where r.name='Receive In Order'--'Receive Out Order'
+                        and r.status='SA'
+                        and RR.ID=r.request_id
+                        and am
+                    </span>
+                    </code>
+                </pre>
+            </div>
+            <div class="output">
+                <h4>Output Esempio</h4>
+                <table>
+                    <tr>
+                        <th>r.id</th>
+                        <th>tipo_ordine</th>
+                        <th>count_network</th>
+                        <th>Logistica</th>
+                        <th>num_prd_wlessprep</th>
+                        <th>num_prd_wless</th>
+                        <th>num_prd_cpem</th>
+                        <th>num_prd_gss</th>
+                        <th>componentRoot</th>
+                        <th>integrationIdTe</th>
+                        <th>sottoTipote</th>
+                        <th>componentPadrete</th>
+                        <th>numeroVocePortato</th>
+                        <th>numeroVocePrecedente</th>
+                    </tr>
+                    <tr>
+                        <td>123456</td>
+                        <td>CAMBIO OFFERTA E DETT</td>
+                        <td>1</td>
+                        <td>N</td>
+                        <td>1</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>1234</td>
+                        <td>202105212004</td>
+                        <td>MNPIN</td>
+                        <td>MNPIN</td>
+                        <td>369852</td>
+                        <td>7413698</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Capitoli successivi -->
+    <div class="chapter" id="chapter2">
+        <h2>ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium</h2>
+        <!-- Inserisci qui il codice per il secondo capitolo -->
+    </div>
+
+    <script>
+        function copyToClipboard(id) {
+            const code = document.getElementById(id).innerText;
+            navigator.clipboard.writeText(code)
+                .then(() => {
+                    alert('Codice copiato negli appunti!');
+                })
+                .catch(err => {
+                    console.error('Errore durante la copia del codice:', err);
+                    alert('Errore durante la copia del codice. Consulta la console per ulteriori dettagli.');
+                });
+        }
+    </script>
+</body>
+</html>

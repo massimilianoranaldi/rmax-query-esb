@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice e Pagina di Riferimento</title>
+    <style>
+        .query-section {
+            font-size: 14px;
+            font-family: monospace;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .query-section code {
+            color: blue;
+        }
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indice</h1>
+        <nav>
+            <ul id="indice">
+                <!-- Contenuto dell'indice verrà generato dinamicamente qui -->
+            </ul>
+        </nav>
+    </header>
+
+    <main id="contenuti">
+        <!-- Contenuto della pagina di riferimento verrà generato dinamicamente qui -->
+    </main>
+
+    <footer>
+        <button id="aggiungi-capitolo">Aggiungi Capitolo</button>
+    </footer>
+
+    <script>
+        // Funzione per aggiungere un nuovo capitolo con titolo e corpo personalizzati
+        function aggiungiCapitolo() {
+            var titoloCapitolo = prompt("Inserisci il titolo del capitolo:");
+            if (!titoloCapitolo) return; // Se l'utente ha cliccato "Annulla"
+
+            var corpoCapitolo = prompt("Inserisci il corpo del capitolo " + titoloCapitolo + ":");
+            if (!corpoCapitolo) return; // Se l'utente ha cliccato "Annulla"
+
+            var indice = document.getElementById('indice');
+            var numeroCapitoli = indice.children.length + 1;
+            var nuovoCapitolo = document.createElement('li');
+            nuovoCapitolo.innerHTML = '<a href="#capitolo' + numeroCapitoli + '">' + titoloCapitolo + '</a>';
+            indice.appendChild(nuovoCapitolo);
+
+            var main = document.getElementById('contenuti');
+            var nuovoContenuto = document.createElement('section');
+            nuovoContenuto.id = 'capitolo' + numeroCapitoli;
+            nuovoContenuto.innerHTML = '<h2>' + titoloCapitolo + '</h2><div class="query-section"><code>' + corpoCapitolo + '</code><button class="copy-button" onclick="copyQuery(this)">Copia</button></div>';
+            main.appendChild(nuovoContenuto);
+        }
+
+        // Funzione per copiare il contenuto del codice
+        function copyQuery(button) {
+            var codice = button.previousSibling.textContent;
+            navigator.clipboard.writeText(codice).then(function() {
+                alert("Contenuto copiato negli appunti!");
+            }, function() {
+                alert("Errore nella copia del contenuto!");
+            });
+        }
+
+        // Aggiungi un evento al pulsante "Aggiungi Capitolo"
+        document.getElementById('aggiungi-capitolo').addEventListener('click', aggiungiCapitolo);
+    </script>
+</body>
+</html>

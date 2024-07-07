@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="query_esb.css">
+    <script src="query_esb.js" defer></script> <!-- Collegamento al file JavaScript -->
+</head>
+<body> <!-- Chiamata alla funzione ripristinaTabella() al caricamento della pagina -->
+    <div class="title">QUERY ESB</div>
+    <!-- Tabella puntamenti -->
+    <div class="container">
+        <div>
+            <div class="database-description">
+                Descrizione del database: Inserire qui una breve descrizione del database.
+            </div>
+            <table id="myTable">
+                <thead>
+				<tr>
+                    <th>Oracle</th>
+                    <th>PROD</th>
+                    <th>STORICO</th>
+                    <th>INT</th>
+                    <th>HT</th>
+                    <th>Azioni</th>
+                </tr>
+				</thead>
+				<tbody>
+                <tr>
+                    <td>Host</td>
+                    <td>10.55.207.217</td>
+                    <td>crm-ora-iv-scan.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>n.a.</td>
+                </tr>
+                <tr>
+                    <td>Port</td>
+                    <td>1567</td>
+                    <td>1521</td>
+                    <td>1522</td>
+                    <td>1522</td>
+                    <td>n.a.</td>
+                </tr>
+                <tr>
+                    <td>Service Name</td>
+                    <td>BWKp_PDB</td>
+                    <td>h1esbp_app_service.wind.root.it</td>
+                    <td>bwkd_pdbint1</td>
+                    <td>bwkd_pdbhf</td>
+                    <td>n.a.</td>
+                </tr>
+						</tbody>
+				
+				
+            </table>
+			<p></p>
+            <button class="chapter-button" onclick="aggiungiRiga()">Aggiungi Riga</button> <!-- Pulsante per aggiungere una riga -->
+        </div>
+    </div>
+
+<!-- Indice -->
+
+    <div class="index-container">
+        <div class="index-title">Indice
+		
+		</div>
+		<button class="chapter-button" onclick="aggiungiParagrafo('-1-')">Aggiungi Capitolo</button>
+        <ul class="index-list">
+            <li class="index-item"><a href="#chapter1">Capitolo 1 - esempio</a>
+                <ul class="paragraphs-list">
+                    <li><a href="#chapter1-section1">Paragrafo 1.1 - esempio</a></li>
+                </ul>
+            </li>
+            <li class="index-item"><a href="#chapter2">Capitolo 2 - esempio</a>
+                <ul class="paragraphs-list">
+                    <li><a href="#chapter2-section1">Paragrafo 2.1 - esempio</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+<!-- STRUTTURA Capitolo 1 -->
+
+    <div class="chapter-container" id="chapter1">
+        <div class="chapter-title">TITOLO CAPITOLO 1</div>
+				<button class="chapter-button" onclick="aggiungiParagrafo('chapter1')">Aggiungi Paragrafo</button>
+				<button class="chapter-button" onclick="eliminaParagrafo('chapter1')">Elimina Paragrafo</button>
+		
+		<!-- STRUTTURA DEL PARAGRAFO -->
+		<div class="section" id="chapter1-section1">
+			
+			<!-- STRUTTURA DEL TITOLO DEL PARAGRAFO -->
+			<div class="section-column1">
+			
+				<div class="section-title">TITOLO PAR.1.1</div>
+				<hr>
+				<!-- STRUTTURA DELLA QUERY DEL PARAGRAFO -->
+				<pre>
+				<code class="language-sql">
+-- Codice PLSQL qui
+SELECT * FROM table_name where pippo="pluto";
+				</code>
+				</pre>
+				<!--<button class="chapter-button" onclick="copiaCodice()">Copia codice</button> -->
+			</div>
+			<p></p> 
+			<div class="section-column2">
+				<!-- STRUTTURA DELLA TABELLA DI OUTPUT DEL PARAGRAFO -->
+				<table>
+					<thead>
+						<tr>
+							<th>Colonna 1</th>
+							<th>Colonna 2</th>
+							<th>Colonna 3</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Dato 1</td>
+							<td>Dato 2</td>
+							<td>Dato 3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p></p>
+        </div>
+        <!-- Aggiungi o elimina sottoparagrafo -->
+    </div>
+
+    <!-- Capitolo 2 -->
+    <div class="chapter-container" id="chapter2">
+		       <div class="chapter-title">TITOLO CAPITOLO 2</div>
+				<button class="chapter-button" onclick="aggiungiParagrafo('chapter2')">Aggiungi Paragrafo</button>
+				<button class="chapter-button" onclick="eliminaParagrafo('chapter2')">Elimina Paragrafo</button>
+		
+
+		<!-- STRUTTURA DEL PARAGRAFO -->
+        
+		<div class="section" id="chapter2-section1">
+			
+			<!-- STRUTTURA DEL TITOLO DEL PARAGRAFO -->
+			
+			<div class="section-column1">
+			
+				<div class="section-title">TITOLO PAR.2.1</div>
+				<hr>
+				<!-- STRUTTURA DELLA QUERY DEL PARAGRAFO -->
+				
+				<pre>
+				<code class="language-sql">
+-- Codice PLSQL qui
+SELECT * FROM table_name where pippo="pluto";
+				</code>
+				</pre>
+			</div>
+			<p></p> 
+			
+			<div class="section-column2">
+				
+				<!-- STRUTTURA DELLA TABELLA DI OUTPUT DEL PARAGRAFO -->
+				
+				<table>
+					<thead>
+						<tr>
+							<th>Colonna 1</th>
+							<th>Colonna 2</th>
+							<th>Colonna 3</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Dato 1</td>
+							<td>Dato 2</td>
+							<td>Dato 3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+<p></p>
+        </div>
+        <!-- Aggiungi o elimina sottoparagrafo -->
+    </div>
+
+</body>
+</html>

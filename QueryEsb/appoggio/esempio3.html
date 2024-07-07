@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice e Pagina di Riferimento</title>
+    <style>
+        .query-section {
+            font-size: 10px;
+            font-family: monospace;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: relative;
+        }
+        .query-section code {
+            color: blue;
+        }
+        .copy-button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indice</h1>
+        <nav>
+            <ul>
+                <li><a href="#capitolo1">ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM</a>
+                    <ul>
+                        <li><a href="#sottocapitolo1.1">Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</a></li>
+                        <!-- Aggiungi altri sottocapitoli se necessario -->
+                    </ul>
+                </li>
+                <!-- Aggiungi altri capitoli se necessario -->
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="capitolo1">
+            <h2>ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM</h2>
+
+            <section id="sottocapitolo1.1">
+                <h3>Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</h3>
+                <div class="query-section">
+                    <code id="formatted-query">select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)>=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss,
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentRoot','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentRoot
+,extractvalue(value(te),'./*[@tipo=''TE'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdTe
+,extractvalue(value(te),'./*[@tipo=''TE'']/@sottoTipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') sottoTipote
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentPadre','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentPadrete
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+--,extractvalue(value(te),'./*[@tipo=''TE'']/@numeroVocePrecedente','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action r, request rr ,action_msg am,
+--TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']',
+--'xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TC'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) pp    
+,TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TE'' and @sottoTipo="MNPIN"]','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) te    
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created>sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum<1000
+--and r.id='3450777873'
+and rr.root_id = (select distinct root_id from detail where value='1-620245797028')</code>
+                <button class="copy-button" onclick="copyQuery()">Copia</button>
+                <script>
+                    function copyQuery() {
+                        var queryText = document.getElementById('formatted-query').textContent;
+                        navigator.clipboard.writeText(queryText).then(function() {
+                            alert("Query copiata negli appunti!");
+                        }, function() {
+                            alert("Errore nella copia della query!");
+                        });
+                    }
+                </script>
+            </section>
+
+            <!-- Aggiungi altri sottocapitoli se necessario -->
+        </section>
+        <!-- Aggiungi altri capitoli se necessario -->
+    </main>
+
+    <footer>
+        <h2>Pagine di Riferimento</h2>
+        <ul>
+            <li><a href="pagina1.html">Pagina 1</a></li>
+            <li><a href="pagina2.html">Pagina 2</a></li>
+            <!-- Aggiungi altri link secondo necessità -->
+        </ul>
+    </footer>
+</body>
+</html>

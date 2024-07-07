@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indice e Pagina di Riferimento</title>
+    <style>
+        .query-section {
+            font-size: 14px;
+            font-family: monospace;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .query-section code {
+            color: blue;
+        }
+        .button-container {
+            margin-top: 10px;
+        }
+        .button-container button {
+            padding: 3px 6px;
+            background-color: #337ab7;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .button-container button:last-child {
+            margin-right: 0;
+        }
+        .table-section {
+            margin-top: 20px;
+        }
+        .table-section table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .table-section table th, .table-section table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .table-section table th {
+            background-color: lightblue;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Indice</h1>
+        <nav>
+            <ul id="indice">
+                <!-- Contenuto dell'indice verrà generato dinamicamente qui -->
+            </ul>
+        </nav>
+    </header>
+
+    <main id="contenuti">
+        <!-- Contenuto della pagina di riferimento verrà generato dinamicamente qui -->
+    </main>
+
+    <footer>
+        <button id="aggiungi-capitolo">Aggiungi Capitolo</button>
+    </footer>
+
+    <script>
+	
+        // Funzione per aggiungere un nuovo capitolo con titolo e corpo personalizzati
+       function aggiungiCapitolo() {
+    var titoloCapitolo = prompt("Inserisci il titolo del capitolo:");
+    if (!titoloCapitolo) return; // Se l'utente ha cliccato "Annulla"
+
+    var corpoCapitolo = prompt("Inserisci il corpo del capitolo " + titoloCapitolo + ":");
+    if (!corpoCapitolo) return; // Se l'utente ha cliccato "Annulla"
+
+    var indice = document.getElementById('indice');
+    var numeroCapitoli = indice.children.length + 1;
+    var nuovoCapitolo = document.createElement('li');
+    nuovoCapitolo.innerHTML = '<a href="#capitolo' + numeroCapitoli + '">' + titoloCapitolo + '</a>';
+    indice.appendChild(nuovoCapitolo);
+
+    var main = document.getElementById('contenuti');
+    var nuovoContenuto = document.createElement('section');
+    nuovoContenuto.id = 'capitolo' + numeroCapitoli;
+    nuovoContenuto.innerHTML = '<h2>' + titoloCapitolo + '</h2><div class="query-section"><pre><code>' + corpoCapitolo + '</code></pre><div class="button-container"><button class="copy-button" onclick="copyQuery(this)">COPY</button><button class="delete-table-button" onclick="deleteTable(this)">Elimina Tabella</button><button class="add-table-button" onclick="addTable(this)">ADDTAB</button></div></div>';
+    main.appendChild(nuovoContenuto);
+
+    // Aggiungi sezione per la tabella
+    var nuovaTabella = document.createElement('section');
+    nuovaTabella.className = 'table-section';
+    main.appendChild(nuovaTabella);
+
+    // Aggiorna il contenuto della pagina
+    updatePageContent();
+}
+
+        // Funzione per copiare il contenuto del capitolo
+// Funzione per copiare il contenuto della sezione della query
+function copyQuery(button) {
+    var querySection = button.parentNode.parentNode.querySelector('.query-section'); // Ottieni la sezione della query
+    var queryContent = querySection.querySelector('code').textContent; // Ottieni il testo della query
+    navigator.clipboard.writeText(queryContent).then(function() {
+        alert("Contenuto copiato negli appunti!");
+    }, function() {
+        alert("Errore nella copia del contenuto!");
+    });
+}
+
+
+
+        // Funzione per eliminare la tabella per ogni capitolo
+        function deleteTable(button) {
+            var capitolo = button.parentNode.parentNode.parentNode;
+            var tableSection = capitolo.querySelector('.table-section');
+            tableSection.parentNode.removeChild(tableSection);
+
+            // Nascondi il pulsante "Rimuovi Tabella" dopo aver eliminato la tabella
+            button.style.display = 'none';
+        }
+
+        // Funzione per trasformare il CSV con TAB come separatore in una tabella HTML
+        function csvToTable(csv) {
+            var lines = csv.split("\n");
+            var tableHtml = "<table border='1'>";
+            lines.forEach(function(line, index) {
+                var cells = line.split("\t"); // Utilizza il TAB come separatore
+                var rowHtml = "<tr>";
+                cells.forEach(function(cell, cellIndex) {
+                    if (index === 0) { // Se si tratta della prima riga
+                        rowHtml += "<th style='background-color: lightblue; font-weight: bold;'>" + cell.trim() + "</th>";
+                    } else {
+                        rowHtml += "<td>" + cell.trim() + "</td>";
+                    }
+                });
+                rowHtml += "</tr>";
+                tableHtml += rowHtml;
+            });
+            tableHtml += "</table>";
+            return tableHtml;
+        }
+
+        // Aggiungi un evento al pulsante "Aggiungi Capitolo"
+        document.getElementById('aggiungi-capitolo').addEventListener('click', aggiungiCapitolo);
+    </script>
+</body>
+</html>

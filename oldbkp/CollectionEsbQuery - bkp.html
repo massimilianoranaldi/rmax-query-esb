@@ -1,0 +1,633 @@
+<html lang="it"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="CollectionEsbQuery.css">
+    <script src="CollectionEsbQuery.js" defer=""></script> <!-- Collegamento al file JavaScript -->
+</head>
+<body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="CollectionEsbQuery.css">
+    <script src="CollectionEsbQuery.js" defer=""></script> <!-- Collegamento al file JavaScript -->
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="CollectionEsbQuery.css">
+    <script src="CollectionEsbQuery.js" defer=""></script> <!-- Collegamento al file JavaScript -->
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="catalogoQueryESB.css">
+    <script src="catalogoQueryESB.js" defer=""></script> <!-- Collegamento al file JavaScript -->
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="catalogoQueryESB.css">
+    <script src="catalogoQueryESB.js" defer=""></script> <!-- Collegamento al file JavaScript -->
+
+ <!-- Chiamata alla funzione ripristinaTabella() al caricamento della pagina -->
+    <div class="title">CATALOGO QUERY ESB</div>
+    <!-- Tabella puntamenti -->
+    <div class="container">
+        <div>
+            <div class="database-description">
+                Puntamenti Database ESB
+            </div>
+                <table id="myTable">
+					<thead>
+						<tr>
+							<th>Ambiente</th>
+							<th>Host</th>
+							<th>Port</th>
+							<th>Service Name</th>
+							<th>Console</th>
+							<th>Console Details</th>							
+							<th>Console Reprocesser</th>										
+							<th>Azioni</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>PROD</td>
+							<td>10.55.207.217</td>
+							<td>1567</td>
+							<td>BWKp_PDB</td>
+							<td>https://ehconsole-prod.aws.windtre.it/#/pages/Login</td>
+							<td>https://ehconsolebackend-prod.aws.windtre.it/api/ehc/detail/getCfgDetails</td>
+							<td>https://ehconsoletibco-prod.aws.windtre.it/reprocess</td>							
+							<td>n.a.</td>
+						</tr>
+						<tr>
+							<td>STORICO</td>
+							<td>crm-ora-iv-scan.wind.root.it</td>
+							<td>1521</td>
+							<td>h1esbp_app_service.wind.root.it</td>
+							<td>n.a.</td>
+							<td>n.a.</td>							
+							<td>n.a.</td>							
+							<td>n.a.</td>
+						</tr>
+						<tr>
+							<td>INT</td>
+							<td>esbdbs50.wind.root.it</td>
+							<td>1522</td>
+							<td>bwkd_pdbint1</td>
+							<td>https://ehconsole-int.aws.windtre.it/#/pages/Login</td>
+							<td>https://ehconsolebackend-int.aws.windtre.it/api/ehc/detail/getCfgDetails</td>				
+							<td>n.a.</td>							
+							<td>n.a.</td>
+						</tr>
+						<tr>
+							<td>HT</td>
+							<td>esbdbs50.wind.root.it</td>
+							<td>1522</td>
+							<td>bwkd_pdbhf</td>
+							<td>https://ehconsole-st.aws.windtre.it/#/pages/Login</td>
+							<td>https://ehconsolebackend-st.aws.windtre.it/api/ehc/detail/getCfgDetails</td>							
+							<td>n.a.</td>							
+							<td>n.a.</td>
+						</tr>
+					</tbody>
+				</table>
+			<p></p>
+            <button class="chapter-button" onclick="aggiungiRiga()">Aggiungi Riga</button> <!-- Pulsante per aggiungere una riga -->
+	
+    </div>
+        </div>
+		
+    </div>
+
+<!-- Indice -->
+
+    <div class="index-container">
+        <div class="index-title">Indice
+		</div>
+		<button class="chapter-button" onclick="aggiungiCapitolo()">Aggiungi Capitolo</button>
+        <ul class="index-list">
+            <li class="index-item"><a href="#chapter1">CAP 1 - Esempio</a>
+                <ul class="paragraphs-list">
+                    <li><a href="#chapter1-section1">PAR 1.1 - Esempio</a></li>
+                </ul>
+            <ul class="paragraphs-list"></ul></li>
+        <li class="index-item"><a href="#ID1715683274554">CAP 2 - ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM</a><ul class="paragraphs-list"><li><a href="#ID1715683342671">PAR 2.1 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715683570858">PAR 2.2 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 2)</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715699465640">PAR 2.3 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (STORICO)</a></li></ul></li><li class="index-item"><a href="#ID1715683589879">CAP 3 - ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium</a><ul class="paragraphs-list"><li><a href="#ID1715683618398">PAR 3.1 - Estrae il cmf-root a partire da una stringa nel payload , dal nome della request e della action</a></li></ul></li><li class="index-item"><a href="#ID1715683635308">CAP 4 - ESTRAZIONE EMF ACTION</a><ul class="paragraphs-list"><li><a href="#ID1715683675062">PAR 4.1 - Estrae EMF della action  a partire da una stringa nel payload , e id action</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715683707324">PAR 4.2 - Estrae le informazioni sulla action a partire da id</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715683745106">PAR 4.3 - Estrae EMF della action a partire dall'id</a></li></ul></li><li class="index-item"><a href="#ID1715683760819">CAP 5 - ESTRAZIONE TIED</a><ul class="paragraphs-list"><li><a href="#ID1715683828245">PAR 5.1 - Estrazione dei flag che definiscono gli scenari TIED a partire dalla data e dal nome della request</a></li></ul></li><li class="index-item"><a href="#ID1715683844281">CAP 6 - QUERY DISCARD</a><ul class="paragraphs-list"><li><a href="#ID1715683871893">PAR 6.1 - Estrazione dei dettagli della discard a partire dall'id ordine</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715684031520">PAR 6.2 - Estrazione sulla discard</a></li></ul></li><li class="index-item"><a href="#ID1715684048573">CAP 7 - QUERY PER ESTRAZIONE OLI SU ESB</a><ul class="paragraphs-list"><li><a href="#ID1715684200563">PAR 7.1 - Estrae OLI in maniera gerarchica a partire dall'ordine (query 1)</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715684284499">PAR 7.2 - Estrae OLI in maniera gerarchica a partire dall'ordine STORICO (query 2)</a></li></ul></li><li class="index-item"><a href="#ID1715686828988">CAP 8 - ESTRAZIONE OGGETTI PROPAGATI AL BILLING</a><ul class="paragraphs-list"><li><a href="#ID1715687175519">PAR 8.1 - query 1</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715687322314">PAR 8.2 - Estrazione action verso billing dalla request id root</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715687991847">PAR 8.3 - STORICO query 2</a></li></ul></li><li class="index-item"><a href="#ID1715687197636">CAP 9 - ESTRAZIONE MEDIANTE REGULAR EXPRESSION</a><ul class="paragraphs-list"><li><a href="#ID1715687225101">PAR 9.1 - Estrazione di un campo dell'action message non ricorsivo</a></li></ul></li><li class="index-item"><a href="#ID1715687232045">CAP 10 - ESTRAZIONE RISORSE</a><ul class="paragraphs-list"><li><a href="#ID1715687260332">PAR 10.1 - Estrazione action verso il mobile resource</a></li></ul></li><li class="index-item"><a href="#ID1715703099721">CAP 11 - QUERY GENERICHE</a><ul class="paragraphs-list"><li><a href="#ID1715703173758">PAR 11.1 - Estrazione casistiche con nome della request padre e figlie</a></li></ul><ul class="paragraphs-list"><li><a href="#ID1715703221491">PAR 11.2 - Estrazione casi request root name</a></li></ul></li></ul>
+    </div>
+
+
+<!-- STRUTTURA Capitolo 1 -->
+
+    
+<div class="chapter-container" id="chapter1">
+        <div class="chapter-title">CAP 1 - Esempio</div>
+				<button class="chapter-button" onclick="aggiungiParagrafo('chapter1')">Aggiungi Paragrafo</button>
+				<button class="chapter-button" onclick="eliminaParagrafo('chapter1')">Elimina Paragrafo</button>
+		
+		<!-- STRUTTURA DEL PARAGRAFO -->
+		<div class="section" id="chapter1-section1">
+			
+			<!-- STRUTTURA DEL TITOLO DEL PARAGRAFO -->
+			<div class="section-column1">
+			
+				<div class="section-title">PAR 1.1 - Esempio</div>
+				<hr>
+				<!-- STRUTTURA DELLA QUERY DEL PARAGRAFO -->
+				<pre class="bkg-section">
+				<code class="language-sql">
+-- Codice PLSQL qui
+SELECT * FROM table_name where pippo="pluto";
+				</code>
+				</pre>
+				<button class="chapter-button" onclick="copiaCode('chapter1-section1')">Copia codice</button>
+			</div>
+			<p></p> 
+			<div class="section-column2">
+				<!-- STRUTTURA DELLA TABELLA DI OUTPUT DEL PARAGRAFO -->
+				<table>
+					<thead>
+						<tr>
+							<th>Colonna 1</th>
+							<th>Colonna 2</th>
+							<th>Colonna 3</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Dato 1</td>
+							<td>Dato 2</td>
+							<td>Dato 3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p></p>
+        </div>
+        <!-- Aggiungi o elimina sottoparagrafo -->
+    </div>
+
+
+<div class="chapter-container" id="ID1715683274554">
+	<div class="chapter-title">CAP 2 - ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM(ID1715683274554)</div>
+	<button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button>
+	<div class="section" id="ID1715683342671">
+		<div class="section-column1">
+			<div class="section-title">PAR 2.1 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1) (ID1715683342671)<hr></div><pre class="bkg-section"><code class="language-sql">select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)&gt;=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentRoot','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentRoot
+,extractvalue(value(te),'./*[@tipo=''TE'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdTe
+,extractvalue(value(te),'./*[@tipo=''TE'']/@sottoTipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') sottoTipote
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentPadre','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentPadrete
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+--,extractvalue(value(te),'./*[@tipo=''TE'']/@numeroVocePrecedente','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action r, request rr ,action_msg am,
+--TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']',
+--'xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TC'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) pp    
+,TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TE'' and @sottoTipo="MNPIN"]','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) te    
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created&gt;sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum&lt;10
+--and r.id='3450777873'
+and rr.root_id =(select distinct root_id from detail where value='1-624901434706'  )</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>STATUS</th><th>NAME</th><th>TS_CREATED</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>BSS_ORDER</th><th>FLAG_SOSPENSIONE</th><th>COUNT_NETWORK</th><th>LOGISTICA</th><th>NUM_PRD_WLESSPREP</th><th>NUM_PRD_WLESS</th><th>NUM_PRD_CPEM</th><th>NUM_PRD_GSS</th><th>COMPONENTROOT</th><th>INTEGRATIONIDTE</th><th>SOTTOTIPOTE</th><th>COMPONENTPADRETE</th><th>NUMEROVOCEPORTATO</th><th>NUMEROVOCEPRECEDENTE</th><th>ID_1</th></tr></thead><tbody><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623894496770</td><td>1623894497664</td><td>MNPIN</td><td>1623894497339</td><td>3472941972</td><td>3283736613</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623895203725</td><td>1623895203778</td><td>MNPIN</td><td>1623895203732</td><td>3453342297</td><td>3205755732</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623894496770</td><td>1623894497664</td><td>MNPIN</td><td>1623894497339</td><td>3472941972</td><td>3283736613</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623895203725</td><td>1623895203778</td><td>MNPIN</td><td>1623895203732</td><td>3453342297</td><td>3205755732</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623894496770</td><td>1623894497664</td><td>MNPIN</td><td>1623894497339</td><td>3472941972</td><td>3283736613</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623895203725</td><td>1623895203778</td><td>MNPIN</td><td>1623895203732</td><td>3453342297</td><td>3205755732</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623894496770</td><td>1623894497664</td><td>MNPIN</td><td>1623894497339</td><td>3472941972</td><td>3283736613</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623895203725</td><td>1623895203778</td><td>MNPIN</td><td>1623895203732</td><td>3453342297</td><td>3205755732</td><td>69880303366</td></tr></tbody></table></div></div><div class="section" id="ID1715683570858"><div class="section-column1"><div class="section-title">PAR 2.2 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 2) (ID1715683570858)<hr></div><pre class="bkg-section"><code class="language-sql">select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)&gt;=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss,
+extractvalue(value(p),'./*[@tipo=''PRD'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdPrd
+,extractvalue(value(p),'./*[@tipo=''PRD'']/@id','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') rowIdPRD
+,extractvalue(value(p),'descendant::*/*/@serviceId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') serviceIdPRD
+,extractvalue(value(p),'descendant::*/*[@tipo=''TC'' and @sottoTipo="SRVPREPMOB"]/nomeAttributo[.="MSISDN"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') msisdn
+,extractvalue(value(p),'descendant::*/*[@tipo=''TC'' and @sottoTipo="SRVPREPMOB"]/@serviceId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') serviceIdTC
+,extractvalue(value(p),'descendant::*/*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(p),'descendant::*/*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action r, request rr ,action_msg am,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created&gt;sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum&lt;3
+--and r.id='3450777873'
+and rr.root_id = (select distinct root_id from detail where value='1-620245797028')</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>STATUS</th><th>NAME</th><th>TS_CREATED</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>BSS_ORDER</th><th>FLAG_SOSPENSIONE</th><th>COUNT_NETWORK</th><th>LOGISTICA</th><th>NUM_PRD_WLESSPREP</th><th>NUM_PRD_WLESS</th><th>NUM_PRD_CPEM</th><th>NUM_PRD_GSS</th><th>INTEGRATIONIDPRD</th><th>ROWIDPRD</th><th>SERVICEIDPRD</th><th>MSISDN</th><th>SERVICEIDTC</th><th>NUMEROVOCEPORTATO</th><th>NUMEROVOCEPRECEDENTE</th><th>ID_1</th></tr></thead><tbody><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623894496770</td><td>1-7Z2CXV2P</td><td>3283736613</td><td>3283736613</td><td>3283736613</td><td>3472941972</td><td>3283736613</td><td>69880303366</td></tr><tr><td>69880303366</td><td>SA</td><td>Receive In Order</td><td>13/05/2024 09:51:39,534342</td><td>Reitero</td><td>Attivazione</td><td>Prima Attivazione</td><td></td><td>0</td><td>2</td><td>N</td><td>2</td><td>0</td><td>0</td><td>0</td><td>1623895203725</td><td>1-7Z2HZSN0</td><td>3205755732</td><td>3205755732</td><td>3205755732</td><td>3453342297</td><td>3205755732</td><td>69880303366</td></tr></tbody></table></div></div><div class="section" id="ID1715699465640"><div class="section-column1"><div class="section-title">PAR 2.3 - Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (STORICO) (ID1715699465640)<hr></div><pre class="bkg-section"><code class="language-sql">select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request_hs where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request_hs where name='Logistics' and root_id=rr.root_id)&gt;=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg_hs b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg_hs b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg_hs b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg_hs b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentRoot','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentRoot
+,extractvalue(value(te),'./*[@tipo=''TE'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdTe
+,extractvalue(value(te),'./*[@tipo=''TE'']/@sottoTipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') sottoTipote
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentPadre','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentPadrete
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+--,extractvalue(value(te),'./*[@tipo=''TE'']/@numeroVocePrecedente','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action_hs r, request_hs rr ,action_msg_hs am,
+--TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']',
+--'xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TC'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) pp    
+,TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TE'' and @sottoTipo="MNPIN"]','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) te    
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created&gt;sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum&lt;10
+--and r.id='3450777873'
+and rr.root_id =(select distinct root_id from detail_hs where value='1-620231736226'  )</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>STATUS</th><th>NAME</th><th>TS_CREATED</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>BSS_ORDER</th><th>FLAG_SOSPENSIONE</th><th>COUNT_NETWORK</th><th>LOGISTICA</th><th>NUM_PRD_WLESSPREP</th><th>NUM_PRD_WLESS</th><th>NUM_PRD_CPEM</th><th>NUM_PRD_GSS</th><th>COMPONENTROOT</th><th>INTEGRATIONIDTE</th><th>SOTTOTIPOTE</th><th>COMPONENTPADRETE</th><th>NUMEROVOCEPORTATO</th><th>NUMEROVOCEPRECEDENTE</th><th>ID_1</th></tr></thead><tbody><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334054734</td><td>1620334054778</td><td>MNPIN</td><td>1620334054761</td><td>3472979188</td><td>3299010063</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334054816</td><td>1620334054860</td><td>MNPIN</td><td>1620334054843</td><td>3387718534</td><td>3299042650</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334054898</td><td>1620334054942</td><td>MNPIN</td><td>1620334054925</td><td>3337801144</td><td>3289840248</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334054980</td><td>1620334055024</td><td>MNPIN</td><td>1620334055007</td><td>3667748666</td><td>3299019574</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334055062</td><td>1620334055106</td><td>MNPIN</td><td>1620334055089</td><td>3336667105</td><td>3289841153</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334055144</td><td>1620334055188</td><td>MNPIN</td><td>1620334055171</td><td>3358188444</td><td>3298316000</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620334055373</td><td>1620335032417</td><td>MNPIN</td><td>1620334055400</td><td>3924191898</td><td>3298320435</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620335032458</td><td>1620335032502</td><td>MNPIN</td><td>1620335032485</td><td>3475347177</td><td>3299017865</td><td>69543892117</td></tr><tr><td>69543892117</td><td>SA</td><td>Receive In Order</td><td>08/04/2024 15:25:12,414268</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>15</td><td>0</td><td>6</td><td>0</td><td>1620335032543</td><td>1620335032587</td><td>MNPIN</td><td>1620335032570</td><td>3396765201</td><td>3299015484</td><td>69543892117</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715683589879"><div class="chapter-title">CAP 3 - ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium(ID1715683589879)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715683618398"><div class="section-column1"><div class="section-title">PAR 3.1 - Estrae il cmf-root a partire da una stringa nel payload , dal nome della request e della action (ID1715683618398)<hr></div><pre class="bkg-section"><code class="language-sql">select a.*,substr(d.document_xml,1,20) from action a, request b , request c ,request_doc d
+where 
+1=1 and 
+a.name='Send order odsn' and 
+a.ts_created&gt;sysdate-90 and rownum&lt;3 and
+a.request_id=b.id and
+b.root_id=c.id and 
+d.id=c.document_id and
+d.document_xml like '%Sostituzione - Kasko Premium%' and
+c.name='Sim/Handset Change'</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th><th>SUBSTR(D.DOCUMENT_XML,1,20)</th></tr></thead><tbody><tr><td>69714101765</td><td>Send order odsn</td><td>outbound</td><td>SA</td><td>24/04/2024 12:33:21,000000</td><td>24/04/2024 12:33:21,766998</td><td></td><td>24/04/2024 12:33:21,000000</td><td>24/04/2024 12:33:21,000000</td><td>24/04/2024 12:33:26,000000</td><td>1</td><td></td><td>queue.sn.crp.out</td><td>3500503597</td><td>-33333719917</td><td>snow</td><td>7275</td><td>/esb2sap/process/businessService/OrderManagement/bwBSInvioOrdineSNOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr><tr><td>69132985510</td><td>Send order odsn</td><td>outbound</td><td>SA</td><td>23/02/2024 17:28:17,000000</td><td>23/02/2024 17:28:17,735691</td><td></td><td>23/02/2024 17:28:17,000000</td><td>23/02/2024 17:28:17,000000</td><td>23/02/2024 17:28:23,000000</td><td>1</td><td></td><td>queue.sn.crp.out</td><td>3457071015</td><td>-32784445354</td><td>snow</td><td>7275</td><td>/esb2sap/process/businessService/OrderManagement/bwBSInvioOrdineSNOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715683635308"><div class="chapter-title">CAP 4 - ESTRAZIONE EMF ACTION(ID1715683635308)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715683675062"><div class="section-column1"><div class="section-title">PAR 4.1 - Estrae EMF della action  a partire da una stringa nel payload , e id action (ID1715683675062)<hr></div><pre class="bkg-section"><code class="language-sql">select a.*,substr(b.message_xml,1,20)  from action a , action_msg b where b.id=a.message_id 
+and b.message_xml like '%32%' and direction='outbound' and system='sdm' and a.ts_created&gt;sysdate-90 and rownum&lt;3
+--and a.id=69159398618</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th><th>SUBSTR(B.MESSAGE_XML,1,20)</th></tr></thead><tbody><tr><td>69697917247</td><td>Modify technical services</td><td>outbound</td><td>SA</td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:49,861836</td><td></td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:52,000000</td><td>1</td><td></td><td>queue.sdm.out</td><td>3499305570</td><td>-33318433178</td><td>sdm</td><td>455</td><td>/esb2sdm/process/businessService/bwBSInvioOrdineSdmOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr><tr><td>69697980576</td><td>Modify technical services</td><td>outbound</td><td>SA</td><td>23/04/2024 08:56:00,000000</td><td>23/04/2024 08:55:59,574940</td><td></td><td>23/04/2024 08:56:01,000000</td><td>23/04/2024 08:56:01,000000</td><td>23/04/2024 08:56:01,000000</td><td>1</td><td></td><td>queue.sdm.out</td><td>3499309540</td><td>-33318493123</td><td>sdm</td><td>455</td><td>/esb2sdm/process/businessService/bwBSInvioOrdineSdmOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr></tbody></table></div></div><div class="section" id="ID1715683707324"><div class="section-column1"><div class="section-title">PAR 4.2 - Estrae le informazioni sulla action a partire da id (ID1715683707324)<hr></div><pre class="bkg-section"><code class="language-sql">select * from action a where --a.request_id='3498943463' and 
+rownum&lt;3</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th></tr></thead><tbody><tr><td>3345784527</td><td>Send Transmission Status</td><td>outbound</td><td>TD</td><td>06/12/2012 09:21:14,631000</td><td>06/12/2012 09:21:15,103175</td><td></td><td></td><td></td><td></td><td>1</td><td></td><td>queue.siebel.out</td><td>389488327</td><td></td><td>siebel</td><td>3036</td><td>/esb2siebel/process/businessService/ContactManagement/bwBSNewIntOutbCnsOut.process</td><td></td><td></td><td></td></tr><tr><td>4405408381</td><td>Receive Response From XCOM</td><td>inbound</td><td>TD</td><td>03/04/2013 03:52:20,179000</td><td>03/04/2013 03:52:20,412032</td><td></td><td></td><td></td><td></td><td>1</td><td></td><td>queue.xcom.in</td><td>489761786</td><td></td><td>xcom</td><td>3046</td><td>/esb2xcom/process/businessService/Consumer/ContactManagement/bwBSGetXcomResponseIn.process</td></tr></tbody></table></div></div><div class="section" id="ID1715683745106"><div class="section-column1"><div class="section-title">PAR 4.3 - Estrae EMF della action a partire dall'id (ID1715683745106)<hr></div><pre class="bkg-section"><code class="language-sql">select to_char(substr(b.message_xml,1,60) )aa from action a , action_msg b where b.id=a.message_id and a.id=69697917247</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>AA</th></tr></thead><tbody><tr><td>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</td></tr><tr><td>&lt;ns0:esbToSdmOrder xm</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715683760819"><div class="chapter-title">CAP 5 - ESTRAZIONE TIED(ID1715683760819)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715683828245"><div class="section-column1"><div class="section-title">PAR 5.1 - Estrazione dei flag che definiscono gli scenari TIED a partire dalla data e dal nome della request (ID1715683828245)<hr></div><pre class="bkg-section"><code class="language-sql">select * from(
+select /* PARALLEL (64) */
+root.id as root_id,
+root.name as root_name,
+root.ts_created as root_ts_created,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrc','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_nrc,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrcOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_nrc_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBArc','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_rc,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBArcOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_rc_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAusg','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_usg,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAusgOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_usg_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:billingAccount[@id = /ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrc]/@tipologiaCdf','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') tipologia_Cdf,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile//ns0:servizioMobile/ns0:tracciamentoNoTax/@azione','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') pre_no_tax,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:esbAttributoGenerico[ns0:nome=''FLAG_IS_MOBILE_TIED_YN'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FLAG_IS_MOBILE_TIED_YN,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''CHANGE_TARIFF_PLAN_TYPE'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') CHANGE_TARIFF_PLAN_TYPE,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''CHANGE_CLASS_TYPE'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') CHANGE_CLASS_TYPE,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_STANDARD_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_STANDARD_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_STANDARD'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_STANDARD,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_STANDARD_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_STANDARD_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_STANDARD'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_STANDARD,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/@flagCPE','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') flagCPE
+from
+request root,
+request_doc doc,
+request sdm
+where
+root.ts_created &gt;= to_date('29/04/2024 00:00:00','dd/mm/yyyy hh24:mi:ss') and
+root.name = 'Change Order' and -- Switch Order (subentro),Change Order (cambi offerta) , Change Tariff Plan (cambi piano) ,Activation Order (att), Deactivation Order (cssz), Change Number (?cambio numero)
+root.id = sdm.root_id and
+sdm.name = 'Mobile Provisioning' and
+sdm.status != 'AB' and
+root.document_id = doc.id 
+--and root.id=3455031415
+)
+where 1=1
+and rownum&lt;3</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ROOT_ID</th><th>ROOT_NAME</th><th>ROOT_TS_CREATED</th><th>ID_BA_NRC</th><th>ID_BA_NRC_OLD</th><th>ID_BA_RC</th><th>ID_BA_RC_OLD</th><th>ID_BA_USG</th><th>ID_BA_USG_OLD</th><th>TIPOLOGIA_CDF</th><th>PRE_NO_TAX</th><th>FLAG_IS_MOBILE_TIED_YN</th><th>CHANGE_TARIFF_PLAN_TYPE</th><th>CHANGE_CLASS_TYPE</th><th>FROM_TIED_TO_PRENOTAX</th><th>FROM_PRENOTAX_TO_PRENOTAX</th><th>FROM_STANDARD_TO_PRENOTAX</th><th>FROM_PRENOTAX_TO_STANDARD</th><th>FROM_TIED_TO_TIED</th><th>FROM_STANDARD_TO_TIED</th><th>FROM_TIED_TO_STANDARD</th><th>FROM_PRENOTAX_TO_TIED</th><th>FLAGCPE</th></tr></thead><tbody><tr><td>3511411408</td><td>Change Order</td><td>11/05/2024 07:51:11,060673</td><td>P1124752841</td><td>P1124752841</td><td>P1124752841</td><td>P1124752841</td><td>P1124752841</td><td>P1124752841</td><td>Prepagato</td><td></td><td>Y</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td></tr><tr><td>3511414848</td><td>Change Order</td><td>11/05/2024 08:28:22,597977</td><td>P1124652826</td><td>P1124652826</td><td>P1124652826</td><td>P1124652826</td><td>P1124652826</td><td>P1124652826</td><td>Postpagato</td><td>-</td><td>N</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td></tr><tr><td>3511402217</td><td>Change Order</td><td>11/05/2024 05:53:13,689303</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td></tr><tr><td>3511402729</td><td>Change Order</td><td>11/05/2024 05:58:21,908076</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715683844281"><div class="chapter-title">CAP 6 - QUERY DISCARD(ID1715683844281)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715683871893"><div class="section-column1"><div class="section-title">PAR 6.1 - Estrazione dei dettagli della discard a partire dall'id ordine (ID1715683871893)<hr></div><pre class="bkg-section"><code class="language-sql">select de.*,DI.RECEIVER_NAME,DI.SYSTEM,DI.TS_DISCARD,DI.ID_DISCARD,
+to_char(REGEXP_SUBSTR(error_msg, '&lt;message&gt;(.*?)&lt;/message&gt;', 1, 1, NULL, 1)) AS error_message
+from detail de, discard2detail dd, discard di
+where di.id_discard = dd.id_discard
+and dd.id_detail = de.id
+and de.value like  
+( '450%') and rownum&lt;3
+order by ts_discard desc</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>VALUE</th><th>POS</th><th>CFG_ID</th><th>ROOT_ID</th><th>RECEIVER_NAME</th><th>SYSTEM</th><th>TS_DISCARD</th><th>ID_DISCARD</th><th>ERROR_MESSAGE</th></tr></thead><tbody><tr><td>39946249968</td><td>transaction_id</td><td>4500017b-7b93-427a-98ac-fe329ff7b55f</td><td>0</td><td>2</td><td></td><td>bwRecDocumentCheck</td><td>cvp</td><td>31/01/2024 19:07:03,845000</td><td>261326070</td><td></td></tr><tr><td>37826199313</td><td>transaction_id</td><td>45000049-e8cf-4a2b-bc25-a28a2a39934b</td><td>0</td><td>2</td><td></td><td>bwRecDocumentCheck</td><td>cvp</td><td>26/04/2023 15:00:17,863000</td><td>254933143</td></tr></tbody></table></div></div><div class="section" id="ID1715684031520"><div class="section-column1"><div class="section-title">PAR 6.2 - Estrazione sulla discard (ID1715684031520)<hr></div><pre class="bkg-section"><code class="language-sql">select * from discard where ts_discard&gt;sysdate-4 and error_msg  like ( '%4503329465%')and  rownum&lt;3</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>n.a.</th></tr></thead><tbody></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715684048573"><div class="chapter-title">CAP 7 - QUERY PER ESTRAZIONE OLI SU ESB(ID1715684048573)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715684200563"><div class="section-column1"><div class="section-title">PAR 7.1 - Estrae OLI in maniera gerarchica a partire dall'ordine (query 1) (ID1715684200563)<hr></div><pre class="bkg-section"><code class="language-sql">select distinct
+zz.req_ts_created,level livello,
+DECODE (LEVEL,
+                   1, zz.TIPO||'-'||zz.sottotipo,
+                   2, '|__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   3, '    |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   4, '       |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   5, '          |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   '             |__ ' || zz.TIPO||'-'||zz.sottotipo)
+              tipo, 
+zz.azione,
+zz.sottoTipo,
+zz.componentRoot,
+zz.id,
+zz.integrationid,
+zz.idPrice,
+zz.mdf,
+zz.codicePs,
+zz.descrizionePS,          
+zz.componentpadre2,
+zz.rcOverridePrice,
+zz.transactionIdAsset,
+zz.idCommercialOrder,
+zz.tipo_ordine,
+zz.sottotipo_ordine,
+zz.causale_ordine,
+zz.req_id,zz.req_status,zz.req_name,
+zz.iccid,
+zz.iccidOld,
+zz.msisdn,
+zz.msisdnOld
+ from (
+select 
+r.id req_id,r.status req_status,r.name req_name,r.ts_created req_ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@idCommercialOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as idCommercialOrder,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+case when p.tipo='PRD' then null else p.componentPadre end as componentpadre2 ,
+p.*
+from action r, request rr ,action_msg am
+,XMLTable(xmlnamespaces( 
+default 'http://phoenix.wind.it/esb/CommercialOrder' 
+),
+              'commercialOrder/order//lineItem'
+              PASSING XMLTYPE(am.message_xml)
+              COLUMNS
+                azione VARCHAR2(50) PATH '@azione'
+                ,integrationId VARCHAR2(50) PATH '@integrationId'
+                ,componentRoot VARCHAR2(50) PATH '@componentRoot'
+                ,componentPadre VARCHAR2(50) PATH '@componentPadre'
+                ,descrizionePS VARCHAR2(50) PATH '@descrizionePS'
+                ,mdf VARCHAR2(50) PATH '@mdf'
+                ,idPrice VARCHAR2(50) PATH '@idPrice'
+                ,id VARCHAR2(50) PATH '@id'
+                ,tipo VARCHAR2(50) PATH '@tipo'
+                 ,sottoTipo VARCHAR2(50) PATH '@sottoTipo'
+                 ,codicePs VARCHAR2(50) PATH '@codicePs'
+                 ,rcOverridePrice VARCHAR2(50) PATH '@rcOverridePrice'
+                 ,transactionIdAsset VARCHAR2(50) PATH '@transactionIdAsset'
+                 ,iccid  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "ICCID")]/@valore'
+                 ,iccidOld  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "ICCID")]/@valorePrecedente'
+                 ,msisdn  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "MSISDN")]/@valore'
+                 ,msisdnOld  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "MSISDN")]/@valorePrecedente'
+                ) p,
+(SELECT a.name as act_name,a.request_id req_root_id
+                               FROM action a, cfg_action b
+                              WHERE a.request_id IN
+                                       (SELECT DISTINCT root_id
+                                          FROM detail
+                                         WHERE VALUE IN (
+--select id from tmp_ordini_com where stato ='dl'
+'1-620231736226'
+))
+                                    AND b.id = a.cfg_id
+                                    AND b.endpoint = 'queue.siebel.crp.om.in') cfg_det                
+where 
+r.name = cfg_det.act_name
+and RR.ID=r.request_id
+and am.id=r.message_id
+and rr.root_id =  cfg_det.req_root_id 
+) zz  
+START WITH 
+zz.componentPadre2 is null 
+CONNECT BY PRIOR  zz.integrationid=zz.componentPadre2
+order by integrationId, idCommercialOrder,level</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>REQ_TS_CREATED</th><th>LIVELLO</th><th>TIPO</th><th>AZIONE</th><th>SOTTOTIPO</th><th>COMPONENTROOT</th><th>ID</th><th>INTEGRATIONID</th><th>IDPRICE</th><th>MDF</th><th>CODICEPS</th><th>DESCRIZIONEPS</th><th>COMPONENTPADRE2</th><th>RCOVERRIDEPRICE</th><th>TRANSACTIONIDASSET</th><th>IDCOMMERCIALORDER</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>REQ_ID</th><th>REQ_STATUS</th><th>REQ_NAME</th><th>ICCID</th><th>ICCIDOLD</th><th>MSISDN</th><th>MSISDNOLD</th></tr></thead><tbody><tr><td>17/04/2024 13:29:52,692761</td><td>1</td><td>PRD-CPEM</td><td>Modify</td><td>CPEM</td><td>1582196212980</td><td>1-7Y16XN39</td><td>1582196212980</td><td></td><td></td><td>PHX00004</td><td>CPE Fonia</td><td></td><td></td><td>1582196212980</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td><td></td><td></td><td></td><td></td></tr><tr><td>17/04/2024 13:29:52,692761</td><td>2</td><td>|__ TC-TERMOB</td><td>-</td><td>TERMOB</td><td>1582196212980</td><td>1-7Y16XN40</td><td>1582196452559</td><td></td><td>POSTPAGATA</td><td>PHX61554</td><td>TM Generico</td><td>1582196212980</td><td></td><td>1582196452559</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td><td></td><td></td><td></td><td></td></tr><tr><td>17/04/2024 13:29:52,692761</td><td>2</td><td>|__ PC-OPZ</td><td>-</td><td>OPZ</td><td>1582196212980</td><td>1-7Y16XN4P</td><td>1582411923573</td><td></td><td>POSTPAGATA</td><td>PHX10361</td><td>PC Rate Terminali Mobili</td><td>1582196212980</td><td></td><td>1582411923573</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td></tr></tbody></table></div></div><div class="section" id="ID1715684284499"><div class="section-column1"><div class="section-title">PAR 7.2 - Estrae OLI in maniera gerarchica a partire dall'ordine STORICO (query 2) (ID1715684284499)<hr></div><pre class="bkg-section"><code class="language-sql">select 
+zz.req_ts_created,
+DECODE (LEVEL,
+                   1, zz.TIPO||'-'||zz.sottotipo,
+                   2, '|__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   3, '    |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   4, '       |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   5, '          |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   '             |__ ' || zz.TIPO||'-'||zz.sottotipo)
+              tipo, 
+zz.azione,
+zz.sottoTipo,
+zz.componentRoot,
+zz.id,
+zz.integrationid,
+zz.idPrice,
+zz.mdf,
+zz.codicePs,
+zz.descrizionePS,          
+zz.componentpadre2,
+zz.rcOverridePrice,
+zz.idCommercialOrder,
+zz.tipo_ordine,
+zz.sottotipo_ordine,
+zz.causale_ordine,
+zz.req_id,zz.req_status,zz.req_name from (
+select 
+r.id req_id,r.status req_status,r.name req_name,r.ts_created req_ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@idCommercialOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as idCommercialOrder,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+case when p.tipo='PRD' then null else p.componentPadre end as componentpadre2 ,
+p.*
+from action_hs r, request_hs rr ,action_msg_hs am
+,XMLTable(xmlnamespaces( 
+default 'http://phoenix.wind.it/esb/CommercialOrder' 
+),
+              'commercialOrder/order//lineItem'
+              PASSING XMLTYPE(am.message_xml)
+              COLUMNS
+                azione VARCHAR2(50) PATH '@azione'
+                ,integrationId VARCHAR2(50) PATH '@integrationId'
+                ,componentRoot VARCHAR2(50) PATH '@componentRoot'
+                ,componentPadre VARCHAR2(50) PATH '@componentPadre'
+                ,descrizionePS VARCHAR2(50) PATH '@descrizionePS'
+                ,mdf VARCHAR2(50) PATH '@mdf'
+                ,idPrice VARCHAR2(50) PATH '@idPrice'
+                ,id VARCHAR2(50) PATH '@id'
+                ,tipo VARCHAR2(50) PATH '@tipo'
+                 ,sottoTipo VARCHAR2(50) PATH '@sottoTipo'
+                 ,codicePs VARCHAR2(50) PATH '@codicePs'
+                 ,rcOverridePrice VARCHAR2(50) PATH '@rcOverridePrice'
+                ) p           
+where 
+r.name = 'Receive Activation Order'
+and RR.ID=r.request_id
+and am.id=r.message_id
+and rr.root_id in 
+ (SELECT DISTINCT root_id
+                                          FROM detail_hs
+                                         WHERE VALUE IN (
+                                             --   '1-619650892429', --INC7181401 roberti problema legato alla chiamata della procedura dei cpe su siebel e assenza del cdf =&gt; indirizzatoa crm 
+'1-605924592287'
+)
+) 
+) zz  
+START WITH 
+zz.componentPadre2 is null 
+CONNECT BY PRIOR  zz.integrationid=zz.componentPadre2
+--order by idcommercialorder,level</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>REQ_TS_CREATED</th><th>LIVELLO</th><th>TIPO</th><th>AZIONE</th><th>SOTTOTIPO</th><th>COMPONENTROOT</th><th>ID</th><th>INTEGRATIONID</th><th>IDPRICE</th><th>MDF</th><th>CODICEPS</th><th>DESCRIZIONEPS</th><th>COMPONENTPADRE2</th><th>RCOVERRIDEPRICE</th><th>TRANSACTIONIDASSET</th><th>IDCOMMERCIALORDER</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>REQ_ID</th><th>REQ_STATUS</th><th>REQ_NAME</th><th>ICCID</th><th>ICCIDOLD</th><th>MSISDN</th><th>MSISDNOLD</th></tr></thead><tbody><tr><td>17/04/2024 13:29:52,692761</td><td>1</td><td>PRD-CPEM</td><td>Modify</td><td>CPEM</td><td>1582196212980</td><td>1-7Y16XN39</td><td>1582196212980</td><td></td><td></td><td>PHX00004</td><td>CPE Fonia</td><td></td><td></td><td>1582196212980</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td><td></td><td></td><td></td><td></td></tr><tr><td>17/04/2024 13:29:52,692761</td><td>2</td><td>|__ TC-TERMOB</td><td>-</td><td>TERMOB</td><td>1582196212980</td><td>1-7Y16XN40</td><td>1582196452559</td><td></td><td>POSTPAGATA</td><td>PHX61554</td><td>TM Generico</td><td>1582196212980</td><td></td><td>1582196452559</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td><td></td><td></td><td></td><td></td></tr><tr><td>17/04/2024 13:29:52,692761</td><td>2</td><td>|__ PC-OPZ</td><td>-</td><td>OPZ</td><td>1582196212980</td><td>1-7Y16XN4P</td><td>1582411923573</td><td></td><td>POSTPAGATA</td><td>PHX10361</td><td>PC Rate Terminali Mobili</td><td>1582196212980</td><td></td><td>1582411923573</td><td>1-622622056788</td><td>Modifica</td><td>Modifica Commerciale</td><td>Variazione Commerciale</td><td>69645577133</td><td>SA</td><td>Receive Commercial/Technical Change</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715686828988"><div class="chapter-title">CAP 8 - ESTRAZIONE OGGETTI PROPAGATI AL BILLING(ID1715686828988)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715687175519"><div class="section-column1"><div class="section-title">PAR 8.1 - query 1 (ID1715687175519)<hr></div><pre class="bkg-section"><code class="language-sql">SELECT  a.id,
+a.status,
+a.name as act_name,
+a.request_id req_root_id,
+p.*
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:numeroTelefono','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as numeroTelefono
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:extIdSI','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as extIdSI
+FROM action a, request c,action_msg d,
+XMLTable(xmlnamespaces( 
+default 'http://billing.wind.it/esb/OrderManagement' 
+),
+              '/activateServiceIstance/serviceIstance//billingElement'
+              PASSING XMLTYPE(d.message_xml)
+              COLUMNS
+                extIdBE VARCHAR2(50) PATH 'extIdBE'
+                ,idBE VARCHAR2(50) PATH 'idBE'
+                ,idPrice VARCHAR2(50) PATH 'idPrice'
+                ,mdf VARCHAR2(50) PATH 'mdf'
+                ,idOrdine VARCHAR2(50) PATH 'idOrdine'
+                ) p           
+                WHERE 
+                              c.id=a.request_id and
+                              c.root_id IN
+                                       (SELECT DISTINCT root_id
+                                          FROM detail
+                                         WHERE VALUE IN (
+                                                 '1-619650892429'                                        )
+        ) and a.system='kenan' and a.direction='outbound' and
+        d.id=a.message_id</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>STATUS</th><th>ACT_NAME</th><th>REQ_ROOT_ID</th><th>EXTIDBE</th><th>IDBE</th><th>IDPRICE</th><th>MDF</th><th>IDORDINE</th><th>NUMEROTELEFONO</th><th>EXTIDSI</th></tr></thead><tbody><tr><td>69853081976</td><td>SA</td><td>Active Service Instance</td><td>3507789740</td><td>1624280975075</td><td>162409</td><td></td><td></td><td>1-624270874302</td><td></td><td>1624275710300</td></tr></tbody></table></div></div><div class="section" id="ID1715687322314"><div class="section-column1"><div class="section-title">PAR 8.2 - Estrazione action verso billing dalla request id root (ID1715687322314)<hr></div><pre class="bkg-section"><code class="language-sql">select b.name,b.id,a.root_id,b.status,''''||b.id||''',',
+(select distinct value from detail where root_id = a.root_id and name='id_odl_crm') id_ordine
+from request a, action  b
+      where 
+      b.request_id=a.id and 
+--      a.root_id in (     572744,     -1      )       
+      a.root_id in (select distinct root_id from detail where value in       ('1-622831680560'))
+--      and b.status ='SA'
+      and b.system='kenan' 
+     and b.direction='outbound'
+     and b.id not in (-1)
+     and rownum&lt;4</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>NAME</th><th>ID</th><th>ROOT_ID</th><th>STATUS</th><th>''''||B.ID||''','</th><th>ID_ORDINE</th></tr></thead><tbody><tr><td>Active Service Instance</td><td>69815515523</td><td>3507789694</td><td>SA</td><td>'69815515523',</td><td>1-624270874302</td></tr><tr><td>Change Billing Element Service Instance</td><td>69840304265</td><td>3507789694</td><td>SK</td><td>'69840304265',</td><td>1-624270874302</td></tr><tr><td>Change Number Service Instance</td><td>69815514712</td><td>3507789694</td><td>SA</td><td>'69815514712',</td><td>1-624270874302</td></tr></tbody></table></div></div><div class="section" id="ID1715687991847"><div class="section-column1"><div class="section-title">PAR 8.3 - STORICO query 2 (ID1715687991847)<hr></div><pre class="bkg-section"><code class="language-sql">SELECT  a.id,
+a.status,
+a.name as act_name,
+a.request_id req_root_id,
+p.*
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:numeroTelefono','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as numeroTelefono
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:extIdSI','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as extIdSI
+FROM action_hs a, request_hs c,action_msg_hs d,
+XMLTable(xmlnamespaces( 
+default 'http://billing.wind.it/esb/OrderManagement' 
+),
+              '/activateServiceIstance/serviceIstance//billingElement'
+              PASSING XMLTYPE(d.message_xml)
+              COLUMNS
+                extIdBE VARCHAR2(50) PATH 'extIdBE'
+                ,idBE VARCHAR2(50) PATH 'idBE'
+                ,idPrice VARCHAR2(50) PATH 'idPrice'
+                ,mdf VARCHAR2(50) PATH 'mdf'
+                ,idOrdine VARCHAR2(50) PATH 'idOrdine'
+                ) p           
+                WHERE 
+                              c.id=a.request_id and
+                              c.root_id IN
+                                       (SELECT DISTINCT root_id
+                                          FROM detail_hs
+                                         WHERE VALUE IN (
+                                                 '1-622454582723'                                        )
+        ) and a.system='kenan' and a.direction='outbound' and
+        d.id=a.message_id</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>STATUS</th><th>ACT_NAME</th><th>REQ_ROOT_ID</th><th>EXTIDBE</th><th>IDBE</th><th>IDPRICE</th><th>MDF</th><th>IDORDINE</th><th>NUMEROTELEFONO</th><th>EXTIDSI</th></tr></thead><tbody><tr><td>69835079823</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682276</td><td>333115</td><td>ID_PRICE_1552</td><td>POSTPAGATA</td><td>1-622454582723</td><td>VULA.w59340500</td><td>1623205682235</td></tr><tr><td>69835079823</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682278</td><td>PHX70328</td><td>ID_PRICE_919</td><td>POSTPAGATA</td><td>1-622454582723</td><td>VULA.w59340500</td><td>1623205682235</td></tr><tr><td>69835079823</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682275</td><td>PHX70021</td><td>ID_PRICE_4836</td><td>POSTPAGATA</td><td>1-622454582723</td><td>VULA.w59340500</td><td>1623205682235</td></tr><tr><td>69835079967</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205723426</td><td>335991</td><td>ID_PRICE_3824</td><td>POSTPAGATA</td><td>1-622454582723</td><td>0118980662</td><td>1623205682347</td></tr><tr><td>69835079967</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205723425</td><td>335989</td><td>ID_PRICE_3822</td><td>POSTPAGATA</td><td>1-622454582723</td><td>0118980662</td><td>1623205682347</td></tr><tr><td>69835079967</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682391</td><td>PHX70023</td><td>ID_PRICE_981</td><td>POSTPAGATA</td><td>1-622454582723</td><td>0118980662</td><td>1623205682347</td></tr><tr><td>69835080644</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682317</td><td>335494</td><td>ID_PRICE_1778</td><td>POSTPAGATA</td><td>1-622454582723</td><td>A21623205682306</td><td>1623205682306</td></tr><tr><td>69835080644</td><td>SA</td><td>Active Service Instance</td><td>3499976802</td><td>1623205682318</td><td>302681</td><td>ID_PRICE_1742</td><td>POSTPAGATA</td><td>1-622454582723</td><td>A21623205682306</td><td>1623205682306</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715687197636"><div class="chapter-title">CAP 9 - ESTRAZIONE MEDIANTE REGULAR EXPRESSION(ID1715687197636)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715687225101"><div class="section-column1"><div class="section-title">PAR 9.1 - Estrazione di un campo dell'action message non ricorsivo (ID1715687225101)<hr></div><pre class="bkg-section"><code class="language-sql">select a.id,a.name,
+        (select to_char(REGEXP_SUBSTR(zz.message_xml, '&lt;RSP__PROVISIONINGDESCRIPTION&gt;(.*?)&lt;/RSP__PROVISIONINGDESCRIPTION&gt;', 1, 1, NULL, 1)) 
+            from action z,action_msg zz 
+                where z.name='Receive mobile provisioning result KO' 
+                and z.request_id=a.request_id 
+                and zz.id=z.message_id 
+                and z.id=(select max(id) from action x where x.name='Receive mobile provisioning result KO' and x.request_id=a.request_id) 
+         ) descr
+        from action a where id in
+        (
+        66078832342,
+66073801202)</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DESCR</th></tr></thead><tbody><tr><td>66073801202</td><td>Modify technical services</td><td>InterfaceVerifyRespFunctionEDA: e' stata ricevuta una risposta negativa '13003'</td></tr><tr><td>66078832342</td><td>Modify technical services</td><td>InterfaceVerifyRespFunctionEDA: e' stata ricevuta una risposta negativa '13003'</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715687232045"><div class="chapter-title">CAP 10 - ESTRAZIONE RISORSE(ID1715687232045)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715687260332"><div class="section-column1"><div class="section-title">PAR 10.1 - Estrazione action verso il mobile resource (ID1715687260332)<hr></div><pre class="bkg-section"><code class="language-sql">select a.name, c.name,b.name from 
+request a, 
+action b,
+request c,
+action_msg d
+where 
+d.id=b.message_id and
+c.root_id=A.ID and
+--c.name='Network' and
+b.request_id=c.id and 
+b.handler like '%mobileResource%' and
+b.system in ('clarify','esb') and 
+a.ts_created&gt;sysdate-70 and
+a.name  in 
+('Change-over'
+/*'In Order',
+'OutOrder', --==&gt; 
+'Extend Order',
+'Sim/Handset Change', --==&gt; 
+'MnpDonor', --==&gt; 
+'Change Number Mnp' --==&gt; 
+*/) and
+rownum&lt;3</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>NAME</th><th>NAME_1</th><th>NAME_2</th></tr></thead><tbody><tr><td>Change-over</td><td>Network</td><td>Update SIM</td></tr><tr><td>Change-over</td><td>Network</td><td>Update SIM</td></tr></tbody></table></div></div></div>
+<div class="chapter-container" id="ID1715703099721"><div class="chapter-title">CAP 11 - QUERY GENERICHE(ID1715703099721)</div><button class="chapter-button">Aggiungi Paragrafo</button><button class="chapter-button">Elimina Paragrafo</button><div class="section" id="ID1715703173758"><div class="section-column1"><div class="section-title">PAR 11.1 - Estrazione casistiche con nome della request padre e figlie (ID1715703173758)<hr></div><pre class="bkg-section"><code class="language-sql">SELECT c.*
+  FROM 
+              request a, 
+              request b, 
+              action c
+ WHERE     a.name = 'Network'
+       AND a.ts_created &gt; SYSDATE - 10
+       AND ROWNUM &lt; 10
+       AND b.id = a.root_id
+       AND b.name = 'In Order'
+       AND c.request_id = a.id
+       AND c.SYSTEM = 'dbag'
+       AND b.status = 'SA'
+       and b.id=3508996329
+       AND EXISTS
+              (SELECT 1
+                 FROM request
+                WHERE name = 'MnpRecipient' AND root_id = b.id) and rownum&lt;3</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th></tr></thead><tbody><tr><td>69856171974</td><td>Notify Activation PS</td><td>outbound</td><td>SA</td><td>10/05/2024 08:21:05,000000</td><td>10/05/2024 08:21:06,086635</td><td></td><td>10/05/2024 08:21:07,000000</td><td>10/05/2024 08:21:07,000000</td><td>10/05/2024 08:21:07,000000</td><td>1</td><td></td><td>queue.dbag.out</td><td>3508996341</td><td>-33467750917</td><td>dbag</td><td>38</td><td>/esb2dbag/process/businessService/OrderManagement/bwBSNotifyAssetLineItemOut.process</td><td></td><td></td><td></td></tr><tr><td>69856175715</td><td>Notify Activation PS</td><td>outbound</td><td>SA</td><td>10/05/2024 08:22:39,000000</td><td>10/05/2024 08:22:40,012879</td><td></td><td>10/05/2024 08:22:40,000000</td><td>10/05/2024 08:22:40,000000</td><td>10/05/2024 08:22:40,000000</td><td>1</td><td></td><td>queue.dbag.out</td><td>3508996346</td><td>-33467754511</td><td>dbag</td><td>38</td><td>/esb2dbag/process/businessService/OrderManagement/bwBSNotifyAssetLineItemOut.process</td></tr></tbody></table></div></div><div class="section" id="ID1715703221491"><div class="section-column1"><div class="section-title">PAR 11.2 - Estrazione casi request root name (ID1715703221491)<hr></div><pre class="bkg-section"><code class="language-sql">SELECT c.*
+  FROM 
+        request a,
+       request b,
+       action c,
+       action_msg d
+ WHERE 1=1 
+       AND b.name = 'Activation Order'
+       and b.id=a.root_id
+       and a.id=c.request_id
+       and d.id=c.message_id
+       AND a.ts_created &gt; SYSDATE - 10
+       AND ROWNUM &lt; 3
+       and c.system='pos'
+       and c.direction='inbound'
+       --and d.message_xml like '%ROPZ4362%'</code></pre><button class="chapter-button">Copia Codice</button></div><div class="section-column2"><table><thead><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th></tr></thead><tbody><tr><td>69876184608</td><td>Receive Activation Order</td><td>inbound</td><td>SA</td><td>12/05/2024 17:19:09,035000</td><td>12/05/2024 17:19:09,083077</td><td></td><td>12/05/2024 17:19:09,000000</td><td>12/05/2024 17:19:09,000000</td><td>12/05/2024 17:19:09,000000</td><td>1</td><td></td><td>queue.pos.cns.in</td><td>3511902210</td><td>-33486752478</td><td>pos</td><td>2168</td><td>/esb2siebelCns/process/businessService/Order/bwBSGestOrd155PosIn.process</td><td></td><td></td><td></td></tr><tr><td>69875904624</td><td>Receive Activation Order</td><td>inbound</td><td>SA</td><td>12/05/2024 15:42:41,448000</td><td>12/05/2024 15:42:41,497840</td><td></td><td>12/05/2024 15:42:41,000000</td><td>12/05/2024 15:42:41,000000</td><td>12/05/2024 15:42:41,000000</td><td>1</td><td></td><td>queue.pos.cns.in</td><td>3511885901</td><td>-33486487511</td><td>pos</td><td>2168</td><td>/esb2siebelCns/process/businessService/Order/bwBSGestOrd155PosIn.process</td></tr></tbody></table></div></div></div></body></html>

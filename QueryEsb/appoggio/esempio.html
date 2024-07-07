@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page>
+    <chapter title="ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM">
+        <subchapter title="Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)">
+            <!--**DB: 10.55.207.217, porta: 1567 , Service Name: BWKp_PDB-->
+            <code><![CDATA[
+            select --am.*,
+            r.id,r.status,r.name,r.ts_created,
+            extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+            extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+            ...
+            --and rownum<1000
+            --and r.id='3450777873'
+            and rr.root_id = (select distinct root_id from detail where value='1-620245797028')
+            ]]></code>
+            <output><![CDATA[
+            /***
+            ID     STATUS    NAME             TS_CREATED              TIPO_ORDINE    SOTTOTIPO_ORDINE    ...
+            -----------------------------------------------------------------------------------------
+            ...    ...       ...              ...                     ...            ...                 ...
+            ...    ...       ...              ...                     ...            ...                 ...
+            ***/]]></output>
+        </subchapter>
+
+        <subchapter title="Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 2)">
+            <!--**DB: 10.55.207.217, porta: 1567 , Service Name: BWKp_PDB-->
+            <code><![CDATA[
+            select --am.*,
+            r.id,r.status,r.name,r.ts_created,
+            extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+            extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+            ...
+            --and rownum<1000
+            --and r.id='3450777873'
+            and rr.root_id = (select distinct root_id from detail where value='1-620245797028')
+            ]]></code>
+            <output><![CDATA[
+            /***
+            ID     STATUS    NAME             TS_CREATED              TIPO_ORDINE    SOTTOTIPO_ORDINE    ...
+            -----------------------------------------------------------------------------------------
+            ...    ...       ...              ...                     ...            ...                 ...
+            ...    ...       ...              ...                     ...            ...                 ...
+            ***/]]></output>
+        </subchapter>
+        
+        <!-- Aggiungi altri sotto capitoli qui -->
+        
+    </chapter>
+
+    <chapter title="ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium">
+        <subchapter title="Estrae il cmf-root a partire da una stringa nel payload , dal nome della request e della action ">
+            <!--**DB: Inserire informazioni del database qui-->
+            <code><![CDATA[
+            select * from action a, request b , request c ,request_doc d
+            where 
+            1=1 and 
+            a.name='Send order odsn' and 
+            a.ts_created>sysdate-90 and rownum<10 and
+            a.request_id=b.id and
+            b.root_id=c.id and 
+            d.id=c.document_id and
+            d.document_xml like '%Sostituzione - Kasko Premium%' and
+            c.name='Sim/Handset Change'
+            ]]></code>
+            <output><![CDATA[
+            /***
+            ID    NAME    VALUE    POS    CFG_ID    ROOT_ID    ID_DISCARD    RECEIVER_NAME    MESSAGE    ERROR_MSG    TS_DISCARD    SYSTEM    ERROR_MESSAGE
+            ...   ...     ...      ...    ...       ...        ...           ...              ...        ...          ...           ...       ...
+            ***/]]></output>
+        </subchapter>
+
+        <!-- Aggiungi altri sotto capitoli qui -->
+        
+    </chapter>
+
+    <!-- Aggiungi altri capitoli qui -->
+
+</page>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
+
+        .tab-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px 5px 0 0;
+            background-color: #f2f2f2;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .tab:last-child {
+            margin-right: 0;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Query</div>
+    <div class="tab-container">
+        <a class="tab" href="query_esb.html" target="_blank">ESB</a>
+        <div class="tab" onclick="openTab('com')">COM</div>
+        <div class="tab" onclick="openTab('comb')">COMB</div>
+    </div>
+    <div id="com" class="tab-content">
+        <!-- Contenuto del tab COM -->
+        Contenuto del tab COM
+    </div>
+    <div id="comb" class="tab-content">
+        <!-- Contenuto del tab COMB -->
+        Contenuto del tab COMB
+    </div>
+</body>
+</html>

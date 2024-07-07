@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUERY ESB</title>
+	<link rel="stylesheet" type="text/css" href="query_esb2.css">
+    
+</head>
+<body>
+    <div class="title">QUERY ESB</div>
+<!-- tabella puntamenti -->
+       <div class="container">
+        <div>
+            <div class="database-description">
+                Descrizione del database: Inserire qui una breve descrizione del database.
+            </div>
+            <table>
+                <tr>
+                    <th>Oracle</th>
+                    <th>PROD</th>
+                    <th>STORICO</th>
+                    <th>INT</th>
+                    <th>HT</th>
+                </tr>
+                <tr>
+                    <td>Host</td>
+                    <td>10.55.207.217</td>
+                    <td>crm-ora-iv-scan.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                </tr>
+                <tr>
+                    <td>Port</td>
+                    <td>1567</td>
+                    <td>1521</td>
+                    <td>1522</td>
+                    <td>1522</td>
+                </tr>
+                <tr>
+                    <td>Service Name</td>
+                    <td>BWKp_PDB</td>
+                    <td>h1esbp_app_service.wind.root.it</td>
+                    <td>bwkd_pdbint1</td>
+                    <td>bwkd_pdbhf</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+	
+        <!-- Indice -->
+    <div class="index-container">
+        <div class="index-title">Indice</div>
+        <ul class="index-list" id="index">
+            <!-- L'indice verrà aggiornato dinamicamente qui -->
+        </ul>
+    </div>
+    <nav>
+        <ul id="index">
+            <!-- L'indice verrà aggiornato dinamicamente qui -->
+        </ul>
+    </nav>
+    <div class="section-container" id="sections">
+        <!-- Le nuove sezioni verranno aggiunte qui -->
+    </div>
+    <div class="button-container">
+        <button class="add-section-button" onclick="addSection()">Aggiungi Sezione</button>
+        <button class="delete-section-button" onclick="deleteSection()">Elimina Sezione</button>
+		<button class="clear-sections-button" onclick="clearSections()">Ripulisci tutte le sezioni</button>
+		    </div>
+    <script>
+	
+	var sectionCount = 0; // Contatore per l'ID numerico delle sezioni
+	
+	//FUNZIONE CANCELLAZIONE TUTTE SEZIONI
+	//---------------------------------------------------------
+	function clearSections() {
+    var confirmClear = confirm("Sei sicuro di voler eliminare tutte le sezioni?");
+    if (confirmClear) {
+        var sectionsContainer = document.getElementById("sections");
+        sectionsContainer.innerHTML = ""; // Rimuovi tutte le sezioni dall'HTML
+        // Aggiorna l'indice dopo aver rimosso tutte le sezioni
+        updateIndex();
+        // Cancella anche i dati salvati nel localStorage
+        localStorage.removeItem("sections");
+		}
+		sectionCount=0
+	}
+	
+	
+	//FUNZIONE CANCELLAZIONE ID SEZIONE
+	//---------------------------------------------------------
+	function deleteSection() {
+            var sectionId = prompt("Inserisci l'ID della sezione da eliminare:");
+            if (!sectionId) return;
+            var sectionToRemove = document.getElementById(sectionId);
+            if (sectionToRemove) {
+                sectionToRemove.remove();
+                updateIndex(); // Aggiorna l'indice dopo aver rimosso la sezione
+                saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo aver rimosso la sezione
+            } else {
+                alert("La sezione con l'ID specificato non esiste.");
+            }
+        }
+		
+	//Funzione per SALVARE le sezioni nel localStorage
+	//---------------------------------------------------------
+	function saveSectionsToLocalStorage() {
+		var sections = document.querySelectorAll(".section");
+		var sectionData = [];
+		sections.forEach(function(section) {
+			var sectionId = section.getAttribute("id");
+			var sectionTitle = section.querySelector(".section-title").textContent.replace("Titolo della Sezione: ", "");
+			var sectionDescription = section.querySelector(".section-description").textContent.replace("Descrizione della Sezione: ", "");
+			var sectionQuery = section.querySelector(".section-query").textContent.replace("Query PL/SQL:", "");
+			//var sectionQuery = section.querySelector(".section-query").value;
+			var sectionCsv = section.querySelector(".section-table table").outerHTML;
+			sectionData.push({
+				id: sectionId,
+				title: sectionTitle,
+				description: sectionDescription,
+				query: sectionQuery,
+				csv: sectionCsv
+			});
+		});
+		localStorage.setItem("sections", JSON.stringify(sectionData));
+	}
+		
+	// Funzione per LOAD le sezioni dal localStorage
+	//---------------------------------------------------------
+	function loadSectionsFromLocalStorage() {
+		var savedSections = localStorage.getItem("sections");
+		var savedSectionCount = localStorage.getItem("sectionCount");
+		   if (savedSectionCount) {
+				// Imposta il valore di sectionCount al valore salvato
+				sectionCount = parseInt(savedSectionCount);
+				}
+		if (savedSections) {
+			var sectionsContainer = document.getElementById("sections");
+			sectionsContainer.innerHTML = "";
+			var sectionData = JSON.parse(savedSections);
+			sectionData.forEach(function(data) {
+				var newSection = document.createElement("div");
+				newSection.setAttribute("id", data.id);
+				newSection.classList.add("section");
+				var titleElement = document.createElement("div");
+				titleElement.classList.add("section-title");
+				titleElement.textContent = "Titolo della Sezione: " + data.title ;
+				var descriptionElement = document.createElement("div");
+				descriptionElement.classList.add("section-description");
+				descriptionElement.textContent = "Descrizione della Sezione: " + data.description;
+
+				
+				
+				//sizing text area QUERY
+				var queryElement = document.createElement("div");
+				queryElement.classList.add("section-query");
+				queryElement.textContent = "Query PL/SQL:" + data.query; // Imposto il testo come contenuto testuale
+
+				
+				var tableElement = document.createElement("div");
+				tableElement.classList.add("section-table");
+				tableElement.innerHTML = data.csv;
+				var copyButton = document.createElement("button");
+				copyButton.classList.add("copy-button");
+				copyButton.textContent = "Copia Query PL/SQL";
+				copyButton.addEventListener("click", function() {
+					copyToClipboard(data.query);
+				});
+				var editButton = document.createElement("button");
+				editButton.classList.add("edit-button");
+				editButton.textContent = "Modifica Query PL/SQL";
+				editButton.addEventListener("click", function() {
+					var newQuery = prompt("Modifica la query PL/SQL:", data.query);
+					if (newQuery !== null) {
+						data.query = newQuery; // Assegna la nuova query a data.query
+						queryElement.innerHTML = "Query PL/SQL:" + newQuery;
+						//queryElement.textContent = newQuery
+						copyButton.addEventListener("click", function() {
+							copyToClipboard(newQuery);
+						});
+						saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+					}
+				});
+				var editTableButton = document.createElement("button");
+				editTableButton.classList.add("edit-table-button");
+				editTableButton.textContent = "Modifica Tabella";
+				editTableButton.addEventListener("click", function() {
+					var newCsv = prompt("Modifica la tabella in formato CSV (utilizza il tab come separatore):", data.csv);
+					if (newCsv !== null) {
+						data.csv = newCsv;
+						tableElement.innerHTML = '';
+						tableElement.appendChild(parseCsvToTable(newCsv));
+						saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+					}
+				});
+				var editTitleButton = document.createElement("button");
+				editTitleButton.classList.add("edit-title-button");
+				editTitleButton.textContent = "Modifica Titolo Sezione";
+				editTitleButton.addEventListener("click", function() {
+					var newTitle = prompt("Modifica il titolo della sezione:", data.title);
+					if (newTitle !== null) {
+						data.title = newTitle;
+						titleElement.textContent = "Titolo della Sezione: " + newTitle ;
+						updateIndex();
+						saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+					}
+				});
+				var editDescriptionButton = document.createElement("button");
+				editDescriptionButton.classList.add("edit-description-button");
+				editDescriptionButton.textContent = "Modifica Descrizione Sezione";
+				editDescriptionButton.addEventListener("click", function() {
+					var newDescription = prompt("Modifica la descrizione della sezione:", data.description);
+					if (newDescription !== null) {
+						data.description = newDescription;
+						descriptionElement.textContent = "Descrizione della Sezione: " + newDescription;
+						updateIndex();
+						saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+					}
+				});
+				newSection.appendChild(titleElement);
+				newSection.appendChild(descriptionElement);
+				newSection.appendChild(queryElement);
+				newSection.appendChild(tableElement);
+				newSection.appendChild(copyButton);
+				newSection.appendChild(editButton);
+				newSection.appendChild(editTableButton);
+				newSection.appendChild(editTitleButton);
+				newSection.appendChild(editDescriptionButton);
+				sectionsContainer.appendChild(newSection);
+			});
+		}
+		updateIndex();
+	}
+	
+	// Funzione per CREATE sezione
+	//---------------------------------------------------------
+	function addSection() {
+		var sectionTitle = prompt("Inserisci il titolo della sezione:");
+		if (!sectionTitle) return;
+		var sectionDescription = prompt("Inserisci la descrizione della sezione:");
+		if (!sectionDescription) return;
+		var sectionQuery = prompt("Inserisci la query PL/SQL:"); //acquisisce in input 
+		//var sectionQuery = document.querySelector(".section-query").value; //acquisice da una compoente html textarea
+		if (!sectionQuery) return;
+		var sectionCsv = prompt("Inserisci la tabella in formato CSV (utilizza il tab come separatore):");
+		if (!sectionCsv) return;
+		var sectionsContainer = document.getElementById("sections");
+		var newSection = document.createElement("div");
+		sectionCount++; // Incrementa il contatore per l'ID numerico della sezione
+		localStorage.setItem("sectionCount", sectionCount);
+		var sectionId = "section" + sectionCount; // Genera l'ID numerico della sezione
+		newSection.setAttribute('id', sectionId);
+		newSection.classList.add("section");
+		var titleElement = document.createElement("div");
+		titleElement.classList.add("section-title");
+		titleElement.textContent = "Titolo della Sezione: " + sectionTitle + " (ID: " + sectionId + ")";
+		var descriptionElement = document.createElement("div");
+		descriptionElement.classList.add("section-description");
+		descriptionElement.textContent = "Descrizione della Sezione: " + sectionDescription;
+		
+		
+		//sizing text area QUERY
+	
+		var queryElement = document.createElement("div");
+		queryElement.classList.add("section-query");
+		queryElement.innerHTML = "Query PL/SQL:" + sectionQuery;
+
+					
+		
+		
+		var tableElement = document.createElement("div");
+		tableElement.classList.add("section-table");
+		tableElement.appendChild(parseCsvToTable(sectionCsv));
+		var copyButton = document.createElement("button");
+		copyButton.classList.add("copy-button");
+		copyButton.textContent = "Copia Query PL/SQL";
+		copyButton.addEventListener("click", function() {
+			copyToClipboard(sectionQuery);
+		});
+		var editButton = document.createElement("button");
+		editButton.classList.add("edit-button");
+		editButton.textContent = "Modifica Query PL/SQL";
+		
+		/*
+		editButton.addEventListener("click", function() {
+			var newQuery = prompt("Modifica la query PL/SQL:", sectionQuery);
+			if (newQuery !== null) {
+				sectionQuery = newQuery; // Assegna la nuova query a sectionQuery
+				queryElement.innerHTML = "Query PL/SQL:" + newQuery.replace(/\n/g, "<br>");
+				copyButton.addEventListener("click", function() {
+					copyToClipboard(newQuery);
+				});
+				saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+			}
+		});
+		*/
+		editButton.addEventListener("click", function() {
+			// Modifica il contenuto del textarea
+			sectionQuery = document.querySelector("#" + sectionId + " .section-query").value;
+			queryElement.innerHTML = "Query PL/SQL:" + sectionQuery;
+			copyButton.addEventListener("click", function() {
+				copyToClipboard(sectionQuery);
+			});
+			saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+		})
+		
+		var editTableButton = document.createElement("button");
+		editTableButton.classList.add("edit-table-button");
+		editTableButton.textContent = "Modifica Tabella";
+		editTableButton.addEventListener("click", function() {
+			var newCsv = prompt("Modifica la tabella in formato CSV (utilizza il tab come separatore):", sectionCsv);
+			if (newCsv !== null) {
+				sectionCsv = newCsv;
+				tableElement.innerHTML = '';
+				tableElement.appendChild(parseCsvToTable(sectionCsv));
+			}
+		});
+		var editTitleButton = document.createElement("button");
+		editTitleButton.classList.add("edit-title-button");
+		editTitleButton.textContent = "Modifica Titolo Sezione";
+		editTitleButton.addEventListener("click", function() {
+			var newTitle = prompt("Modifica il titolo della sezione:", sectionTitle);
+			if (newTitle !== null) {
+				sectionTitle = newTitle;
+				titleElement.textContent = "Titolo della Sezione: " + newTitle + " (ID: " + sectionId + ")";
+				updateIndex();
+			}
+		});
+		var editDescriptionButton = document.createElement("button");
+		editDescriptionButton.classList.add("edit-description-button");
+		editDescriptionButton.textContent = "Modifica Descrizione Sezione";
+		editDescriptionButton.addEventListener("click", function() {
+			var newDescription = prompt("Modifica la descrizione della sezione:", sectionDescription);
+			if (newDescription !== null) {
+				sectionDescription = newDescription;
+				descriptionElement.textContent = "Descrizione della Sezione: " + newDescription;
+				updateIndex();
+			}
+		});
+		newSection.appendChild(titleElement);
+		newSection.appendChild(descriptionElement);
+		newSection.appendChild(queryElement);
+		newSection.appendChild(tableElement);
+		newSection.appendChild(copyButton);
+		newSection.appendChild(editButton);
+		newSection.appendChild(editTableButton);
+		newSection.appendChild(editTitleButton);
+		newSection.appendChild(editDescriptionButton);
+		sectionsContainer.appendChild(newSection);
+		// Aggiungi voce all'indice
+		updateIndex();
+	}
+	
+	// Funzione per parsing csv
+	//---------------------------------------------------------
+	function parseCsvToTable(csv) {
+		var rows = csv.trim().split("\n");
+		var table = document.createElement("table");
+		table.style.fontSize = "8px";
+		rows.forEach(function(row, rowIndex) {
+			var cells = row.split("\t");
+			var tr = document.createElement("tr");
+			cells.forEach(function(cell, cellIndex) {
+				var cellElement = rowIndex === 0 ? document.createElement("th") : document.createElement("td");
+				cellElement.textContent = cell.trim();
+				tr.appendChild(cellElement);
+			});
+			table.appendChild(tr);
+		});
+		// Aggiungi classe alla prima riga per rendere le celle celesti
+		table.querySelector("tr").classList.add("first-row");
+		return table;
+	}
+	
+	// Funzione per copiare testo
+	//---------------------------------------------------------
+	function copyToClipboard(text) {
+		navigator.clipboard.writeText(text).then(function() {
+			alert("Testo copiato negli appunti!");
+		}, function() {
+			alert("Errore durante la copia del testo!");
+		});
+	}
+
+	// Funzione per aggiornare indice
+	//---------------------------------------------------------
+	function updateIndex() {
+		var indexList = document.getElementById("index");
+		indexList.innerHTML = ''; // Cancella l'indice attuale
+		var sections = document.querySelectorAll(".section");
+		sections.forEach(function(section) {
+		var sectionId = section.getAttribute("id");
+		var sectionTitle = section.querySelector(".section-title").textContent.replace("Titolo della Sezione: ", "");
+		var sectionDescription = section.querySelector(".section-description").textContent.replace("Descrizione della Sezione: ", "");
+		var sectionItem = document.createElement("li");
+		var sectionLink = document.createElement("a");
+		sectionLink.href = "#" + sectionId;
+		sectionLink.textContent = sectionTitle;
+		sectionItem.appendChild(sectionLink);
+		// Verifica la presenza di sotto-sezioni
+		var subSections = section.querySelectorAll(".section-description");
+		if (subSections.length > 0) {
+			// Aggiungi sottoelenco per le sotto-sezioni
+			var subSectionList = document.createElement("ul");
+			subSections.forEach(function(subSection, index) {
+				var subSectionId = sectionId + "_sub" + (index + 1); // Genera un ID univoco per la sotto-sezione
+				var subSectionText = subSection.textContent.replace("Descrizione della Sezione: ", "");
+				var subSectionItem = document.createElement("li");
+				var subSectionLink = document.createElement("a");
+				subSectionLink.href = "#" + subSectionId;
+				subSectionLink.textContent = subSectionText;
+				subSectionItem.appendChild(subSectionLink);
+				subSectionList.appendChild(subSectionItem);
+			});
+			sectionItem.appendChild(subSectionList);
+		}
+		indexList.appendChild(sectionItem);
+	});
+	// Salvataggio delle modifiche nell'indice nel localStorage
+	saveIndexToLocalStorage();
+}
+	
+	// Funzione per salvare indice
+	//---------------------------------------------------------
+	function saveIndexToLocalStorage() {
+	var indexList = document.getElementById("index");
+	var indexItems = indexList.querySelectorAll("li");
+	var indexData = [];
+	// Itera attraverso gli elementi dell'indice e salva le informazioni necessarie
+	indexItems.forEach(function(item) {
+		var sectionId = item.querySelector("a").getAttribute("href").substring(1); // Rimuove il carattere #
+		var sectionTitle = item.querySelector("a").textContent;
+		// Ottieni le sotto-sezioni, se presenti
+		var subSections = item.querySelectorAll("ul li");
+		var subSectionData = [];
+		subSections.forEach(function(subItem) {
+			var subSectionId = subItem.querySelector("a").getAttribute("href").substring(1); // Rimuove il carattere #
+			var subSectionTitle = subItem.querySelector("a").textContent;
+			subSectionData.push({
+				id: subSectionId,
+				title: subSectionTitle
+			});
+		});
+		indexData.push({
+			id: sectionId,
+			title: sectionTitle,
+			subSections: subSectionData
+		});
+	});
+	localStorage.setItem("indexData", JSON.stringify(indexData));
+}
+
+
+	// Chiamata alla funzione per salvare l'indice nel localStorage prima del refresh della pagina
+	window.addEventListener("beforeunload", saveIndexToLocalStorage);
+	// Chiamata alla funzione per caricare le sezioni al caricamento della pagina
+	window.addEventListener("load", loadSectionsFromLocalStorage);
+	// Chiamata alla funzione per salvare le sezioni prima di chiudere la pagina
+	window.addEventListener("beforeunload", saveSectionsToLocalStorage);
+    </script>
+</body>
+</html>

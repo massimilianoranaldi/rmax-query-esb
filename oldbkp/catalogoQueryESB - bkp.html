@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CATALOGO QUERY ESB</title>
+    <link rel="stylesheet" type="text/css" href="catalogoQueryESB.css">
+    <script src="catalogoQueryESB.js" defer></script> <!-- Collegamento al file JavaScript -->
+</head>
+<body> <!-- Chiamata alla funzione ripristinaTabella() al caricamento della pagina -->
+
+
+
+    <div class="title">CATALOGO QUERY ESB</div>
+	<button onclick="saveLocalStorageToFile()">Salva localStorage</button>
+    <!-- Tabella puntamenti -->
+    <div class="container">
+        <div>
+            <div class="database-description">
+                Puntamenti Database ESB
+            </div>
+            <table id="myTable">
+                <thead>
+				<tr>
+                    <th>Ambiente</th>
+                    <th>Host</th>
+                    <th>Port</th>
+                    <th>Service Name</th>
+                    <th>Azioni</th>
+                </tr>
+				</thead>
+				<tbody>
+                <tr>
+                    <td>PROD</td>
+                    <td>10.55.207.217</td>
+                    <td>1567</td>
+                    <td>BWKp_PDB</td>
+                    <td>n.a.</td>
+                </tr>
+                <tr>
+                    <td>STORICO</td>
+                    <td>crm-ora-iv-scan.wind.root.it</td>
+                    <td>1521</td>
+                    <td>h1esbp_app_service.wind.root.it</td>
+                    <td>n.a.</td>
+                </tr>
+                <tr>
+                    <td>INT</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>1522</td>
+                    <td>bwkd_pdbint1</td>
+                    <td>n.a.</td>
+                </tr>
+				                <tr>
+                    <td>HT</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>1522</td>
+                    <td>bwkd_pdbhf</td>
+                    <td>n.a.</td>
+                </tr>
+						</tbody>
+				
+				
+            </table>
+			<p></p>
+            <button class="chapter-button" onclick="aggiungiRiga()">Aggiungi Riga</button> <!-- Pulsante per aggiungere una riga -->
+        </div>
+    </div>
+
+<!-- Indice -->
+
+    <div class="index-container">
+        <div class="index-title">Indice
+		</div>
+		<button class="chapter-button" onclick="aggiungiCapitolo()">Aggiungi Capitolo</button>
+        <ul class="index-list">
+            <li class="index-item"><a href="#chapter1">CAP 1 - Esempio</a>
+                <ul class="paragraphs-list">
+                    <li><a href="#chapter1-section1">PAR 1.1 - Esempio</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+
+<!-- STRUTTURA Capitolo 1 -->
+
+    <div class="chapter-container" id="chapter1">
+        <div class="chapter-title">CAP 1 - Esempio</div>
+				<button class="chapter-button" onclick="aggiungiParagrafo('chapter1')">Aggiungi Paragrafo</button>
+				<button class="chapter-button" onclick="eliminaParagrafo('chapter1')">Elimina Paragrafo</button>
+		
+		<!-- STRUTTURA DEL PARAGRAFO -->
+		<div class="section" id="chapter1-section1">
+			
+			<!-- STRUTTURA DEL TITOLO DEL PARAGRAFO -->
+			<div class="section-column1">
+			
+				<div class="section-title">PAR 1.1 - Esempio</div>
+				<hr>
+				<!-- STRUTTURA DELLA QUERY DEL PARAGRAFO -->
+				<pre>
+				<code class="language-sql">
+-- Codice PLSQL qui
+SELECT * FROM table_name where pippo="pluto";
+				</code>
+				</pre>
+				<button class="chapter-button" onclick="copiaCode('chapter1-section1')">Copia codice</button>
+			</div>
+			<p></p> 
+			<div class="section-column2">
+				<!-- STRUTTURA DELLA TABELLA DI OUTPUT DEL PARAGRAFO -->
+				<table>
+					<thead>
+						<tr>
+							<th>Colonna 1</th>
+							<th>Colonna 2</th>
+							<th>Colonna 3</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Dato 1</td>
+							<td>Dato 2</td>
+							<td>Dato 3</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<p></p>
+        </div>
+        <!-- Aggiungi o elimina sottoparagrafo -->
+    </div>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,354 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 90px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/*formattazione per tutte le tabella statiche*/
+
+table button {
+    padding: 5px 10px;
+    background-color: #f2f2f2;
+    color: #337ab7;
+    border: 1px solid #337ab7;
+    border-radius: 1px;
+    cursor: pointer;
+    width: auto;
+    height: auto;
+}
+
+table {
+    
+	border-collapse: separate;
+	border-spacing: 1px;
+    width: auto;
+
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 2px; /*distanca tra la scritta e la cella in cui è contenuta*/
+    text-align: left;
+    width: auto;
+    height: auto;
+	font-size: 12px;
+	
+}
+
+th {
+    background-color: white;
+}
+
+
+    #myTable thead tr:first-child th {
+        background-color: lightblue; /* Imposta il colore di sfondo della prima riga dell'intestazione */
+    }
+    
+    #myTable tbody tr  {
+        background-color: white; /* Imposta il colore di sfondo delle celle del tbody */
+    }
+
+
+
+/*formattazione capitolo*/
+
+       .chapter-container {
+		   
+            border: 2px solid black; /* Aggiunge una cornice nera */
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+			
+			
+        }
+
+        .chapter-title {
+            
+            font-weight: bold;
+			color: white;
+            margin-bottom: 10px;
+			position: relative; /* Aggiungi posizionamento relativo per posizionare i pulsanti in base a questo elemento */
+			background-color: #17889C; /* Imposta il colore di sfondo verde */
+			font-size: 27px;
+        }
+
+     
+
+        .section-title {
+            font-size: 20px;
+            font-style: italic;
+            margin-bottom: 10px;
+			background-color: #57BCC9;
+			color: white;
+        }
+
+        .index-container {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 20px;
+			
+        }
+
+
+
+        .index-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .index-item {
+            margin-bottom: 5px;
+        }
+
+/* paragrafi */
+
+
+
+/* indici */
+/*----------------------------------------------------------------*/
+nav {
+    margin-bottom: 20px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    margin-bottom: 5px;
+}
+
+nav ul ul {
+    list-style-type: none;
+    margin: 0;
+    padding-left: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #337ab7;
+}
+/*----------------------------------------------------------------*/
+
+/* tabella dinamica*/
+/* ---------------------------------------------------*/
+.first-row th {
+    background-color: lightblue;
+}
+.section-column2 {
+    /* Altri stili per la colonna, ad esempio larghezza massima */
+    max-width: 100%; /* Adatta la larghezza massima alla larghezza massima consentita */
+	overflow-x: auto; /* Abilita lo scorrimento orizzontale quando necessario */
+}
+
+.section-column1 {
+
+    /* Altri stili per la colonna, ad esempio larghezza massima */
+    max-width: 100%; /* Adatta la larghezza massima alla larghezza massima consentita */
+	overflow-x: auto; /* Abilita lo scorrimento orizzontale quando necessario */
+}
+
+
+
+/* ---------------------------------------------------*/
+
+/*stile riquadro indice*/
+.index-container {
+    font-size: 17px;
+    margin-top: 20px;
+    padding: 10px;
+   
+    border-radius: 5px;
+	border: 2px solid black; /* Aggiunge un bordo nero al container */
+            padding: 10px;
+            margin-bottom: 20px;
+}
+
+/*titolo indice INDICE*/
+.index-title {
+    font-size: 27px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+
+.index-list {
+    list-style-type: none;
+    font-size: 15px;
+    padding: 0;
+}
+
+.index-item {
+    margin-bottom: 5px;
+    font-size: 15px;
+}
+
+.paragraphs-list {
+    font-size: 10px; /* Imposta la dimensione del font desiderata */
+}
+
+/* sezione iniziale contenete la tabella dei puntamenti */
+.container {
+    font-size: 17px;
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+	border: 2px solid black; /* Aggiunge un bordo nero al container */
+	max-width: 100%; /* Adatta la larghezza massima alla larghezza massima consentita */
+	overflow-x: auto; /* Abilita lo scorrimento orizzontale quando necessario */
+}
+
+
+.database-description {
+    font-size: 27px;
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.section {
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+	margin-bottom: 20px;
+	background-color:white;
+	
+
+}
+
+
+/*stile tasti */
+/*-----------------------------------------*/
+
+.chapter-title {
+    position: relative; /* Aggiungi posizionamento relativo per posizionare i pulsanti in base a questo elemento */
+}
+
+.chapter-button {
+	
+    
+    bottom: 100px; /* Posiziona il pulsante 10px dal bordo inferiore della finestra del browser */
+    right: 1px; /* Posiziona il pulsante 10px dal bordo destro della finestra del browser */
+
+	
+	margin-bottom: 0px; /* Aggiungi spazio tra i pulsanti e il bordo inferiore */
+    margin-right: 10px; /* Aggiungi spazio tra i pulsanti e il bordo destro */
+	margin-left: 0px; 
+    border-radius: 5px; /* Rendi i pulsanti stondati */
+    background-color: #17889C; /* Imposta il colore di sfondo verde */
+    color: white; /* Imposta il colore del testo su bianco */
+    padding: 5px 15px; /* Aggiungi spazio intorno al testo */
+    border: none; /* Rimuovi il bordo */
+    cursor: pointer; /* Imposta il cursore a puntatore al passaggio del mouse */
+    transition: background-color 0.5s; /* Aggiungi una transizione sul cambiamento del colore di sfondo */
+}
+
+.chapter-button:hover {
+    background-color: darkgreen; /* Cambia il colore di sfondo al passaggio del mouse */
+}
+
+
+
+/*-----------------------------------------*/
+
+code.language-sql {
+    
+    padding: 1px; /* Padding per spaziatura */
+    border-radius: 5px; /* Bordi arrotondati */
+	font-size: 9px;
+	color: blue;
+	background-color: white;
+
+}
+
+pre.language-sql {
+    
+    padding: 1px; /* Padding per spaziatura */
+    border-radius: 5px; /* Bordi arrotondati */
+	font-size: 9px;
+	color: blue;
+	background-color: white;
+
+}
+
+.section-column1 {
+	background-color:white;
+    padding: 1px; /* Padding per spaziatura */
+    border-radius: 5px; /* Bordi arrotondati */
+	
+    /* Altri stili per la colonna, ad esempio larghezza massima */
+    max-width: 100%; /* Adatta la larghezza massima alla larghezza massima consentita */
+	overflow-x: auto; /* Abilita lo scorrimento orizzontale quando necessario */
+	    /* Altri stili per la colonna, ad esempio larghezza massima */
+
+}
+
+.bkg-section {
+	background-color:white;
+    padding: 1px; /* Padding per spaziatura */
+    border-radius: 5px; /* Bordi arrotondati */
+	
+    /* Altri stili per la colonna, ad esempio larghezza massima */
+    max-width: 100%; /* Adatta la larghezza massima alla larghezza massima consentita */
+	overflow-x: auto; /* Abilita lo scorrimento orizzontale quando necessario */
+	    /* Altri stili per la colonna, ad esempio larghezza massima */
+
+}
+
+
+
+/*finestara di modifica area*/
+.modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgb(0,0,0); 
+            background-color: rgba(0,0,0,0.4); 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+		
+		
+/*disabilitare tasto*/
+    .disabled {
+  
+        opacity: 0.5;
+        cursor: not-allowed;
+    }		

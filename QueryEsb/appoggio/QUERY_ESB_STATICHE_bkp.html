@@ -1,0 +1,811 @@
+<html lang="it"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUERY ESB</title>
+	<link rel="stylesheet" type="text/css" href="query_esb2.css">
+    
+</head>
+<body>
+    <div class="title">QUERY ESB</div>
+<!-- tabella puntamenti -->
+       <div class="container">
+        <div>
+            <div class="database-description">
+                Descrizione del database: Inserire qui una breve descrizione del database.
+            </div>
+            <table>
+                <tbody><tr>
+                    <th>Oracle</th>
+                    <th>PROD</th>
+                    <th>STORICO</th>
+                    <th>INT</th>
+                    <th>HT</th>
+                </tr>
+                <tr>
+                    <td>Host</td>
+                    <td>10.55.207.217</td>
+                    <td>crm-ora-iv-scan.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                    <td>esbdbs50.wind.root.it</td>
+                </tr>
+                <tr>
+                    <td>Port</td>
+                    <td>1567</td>
+                    <td>1521</td>
+                    <td>1522</td>
+                    <td>1522</td>
+                </tr>
+                <tr>
+                    <td>Service Name</td>
+                    <td>BWKp_PDB</td>
+                    <td>h1esbp_app_service.wind.root.it</td>
+                    <td>bwkd_pdbint1</td>
+                    <td>bwkd_pdbhf</td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+	
+        <!-- Indice -->
+    <div class="index-container">
+        <div class="index-title">Indice</div>
+        <ul class="index-list" id="index"><li><a href="#section1">ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM (ID: section1)</a><ul><li><a href="#section1_sub1">Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</a></li></ul></li><li><a href="#section2">ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM (ID: section2)</a><ul><li><a href="#section2_sub1">Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 2)</a></li></ul></li><li><a href="#section3">ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium (ID: section3)</a><ul><li><a href="#section3_sub1">Estrae il cmf-root a partire da una stringa nel payload , dal nome della request e della action</a></li></ul></li><li><a href="#section4">ESTRAZIONE EMF ACTION (ID: section4)</a><ul><li><a href="#section4_sub1">Estrae EMF della action  a partire da una stringa nel payload , e id action</a></li></ul></li><li><a href="#section5">ESTRAZIONE EMF ACTION (ID: section5)</a><ul><li><a href="#section5_sub1">Estrae le informazioni sulla action a partire da id</a></li></ul></li><li><a href="#section6">ESTRAZIONE EMF ACTION (ID: section6)</a><ul><li><a href="#section6_sub1">Estrae EMF della action a partire dall'id</a></li></ul></li><li><a href="#section7">ESTRAZIONE TIED (ID: section7)</a><ul><li><a href="#section7_sub1">Estrazione dei flag che definiscono gli scenari TIED a partire dalla data e dal nome della request</a></li></ul></li><li><a href="#section8">QUERY DISCARD (ID: section8)</a><ul><li><a href="#section8_sub1">Estrazione dei dettagli della discard a partire dall'id ordine</a></li></ul></li><li><a href="#section9">QUERY PER ESTRAZIONE OLI SU ESB (ID: section9)</a><ul><li><a href="#section9_sub1">Estrae OLI in maniera gerarchica a partire dall'ordine</a></li></ul></li><li><a href="#section10">STORICO : QUERY PER ESTRAZIONE OLI SU ESB  (ID: section10)</a><ul><li><a href="#section10_sub1">Estrae OLI in maniera gerarchica a partire dall'ordine</a></li></ul></li><li><a href="#section11">ESTRAZIONE VERSO COMBILLING (ID: section11)</a><ul><li><a href="#section11_sub1">Query per estrazione oggetti propagati al billing</a></li></ul></li><li><a href="#section12">ESTRAZIONE MEDIANTE REGULAR EXPRESSION (ID: section12)</a><ul><li><a href="#section12_sub1">Estrazione di un campo dell'action message non ricorsivo</a></li></ul></li><li><a href="#section13">ESTRAZIONE RISORSE (ID: section13)</a><ul><li><a href="#section13_sub1">Estrazione action verso il mobile resource</a></li></ul></li><li><a href="#section14">ESTRAZIONE RISORSE (ID: section14)</a><ul><li><a href="#section14_sub1">Estrazione action verso billing dalla request id root</a></li></ul></li></ul>
+    </div>
+    <nav>
+        <ul id="index">
+            <!-- L'indice verrà aggiornato dinamicamente qui -->
+        </ul>
+    </nav>
+    <div class="section-container" id="sections"><div id="section1" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM (ID: section1)</div><div class="section-description">Descrizione della Sezione: Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 1)</div><div class="section-query">Query PL/SQL:select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)&gt;=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentRoot','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentRoot
+,extractvalue(value(te),'./*[@tipo=''TE'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdTe
+,extractvalue(value(te),'./*[@tipo=''TE'']/@sottoTipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') sottoTipote
+,extractvalue(value(te),'./*[@tipo=''TE'']/@componentPadre','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') componentPadrete
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(te),'./*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+--,extractvalue(value(te),'./*[@tipo=''TE'']/@numeroVocePrecedente','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action r, request rr ,action_msg am,
+--TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']',
+--'xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TC'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) pp    
+,TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''TE'' and @sottoTipo="MNPIN"]','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) te    
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created&gt;sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum&lt;3
+--and r.id='3450777873'
+and rr.root_id = (select distinct root_id from detail where value='1-620245797028')</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>STATUS</th><th>NAME</th><th>TS_CREATED</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>BSS_ORDER</th><th>FLAG_SOSPENSIONE</th><th>COUNT_NETWORK</th><th>LOGISTICA</th><th>NUM_PRD_WLESSPREP</th><th>NUM_PRD_WLESS</th><th>NUM_PRD_CPEM</th><th>NUM_PRD_GSS</th><th>COMPONENTROOT</th><th>INTEGRATIONIDTE</th><th>SOTTOTIPOTE</th><th>COMPONENTPADRETE</th><th>NUMEROVOCEPORTATO</th><th>NUMEROVOCEPRECEDENTE</th><th>ID_1</th></tr><tr><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>19/03/2024 20:13:27,306712</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>4</td><td>0</td><td>0</td><td>0</td><td>1620247392464</td><td>1620247392500</td><td>MNPIN</td><td>1620247392483</td><td>3200413230</td><td>3298328083</td><td>69358095650</td></tr><tr><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>19/03/2024 20:13:27,306712</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>4</td><td>0</td><td>0</td><td>0</td><td>1620247392541</td><td>1620247392577</td><td>MNPIN</td><td>1620247392560</td><td>3339333556</td><td>3299035517</td><td>69358095650</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section2" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE NUMEROSITA PRODOTTI SU ORDINE CRM (ID: section2)</div><div class="section-description">Descrizione della Sezione: Estrae i campi dell'ordine e la numerosità dei prodotti a partire da id ordine e nome della action inbound (query 2)</div><div class="section-query">Query PL/SQL:select --am.*,
+r.id,r.status,r.name,r.ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@bssOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as bss_order,
+extractValue(xmltype(message_xml),'commercialOrder/order/@flagSospensione','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as flag_sospensione,
+(select count(id) from request where name='Network' and root_id=rr.root_id) as count_network,
+(case when (select count (id) from request where name='Logistics' and root_id=rr.root_id)&gt;=1 then 'Y' else 'N' end) as Logistica,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESSPREPAG'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wlessprep,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''WLESS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_wless,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''CPEM'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_cpem,
+(SELECT count(*) FROM action_msg b, TABLE ( XMLSEQUENCE ( EXTRACT ( xmltype (b.message_xml), '/commercialOrder/order/lineItem[@sottoTipo=''GSS'']',   'xmlns="http://phoenix.wind.it/esb/CommercialOrder"  '))) p  where  b.id=am.id) num_prd_gss,
+extractvalue(value(p),'./*[@tipo=''PRD'']/@integrationId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') integrationIdPrd
+,extractvalue(value(p),'./*[@tipo=''PRD'']/@id','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') rowIdPRD
+,extractvalue(value(p),'descendant::*/*/@serviceId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') serviceIdPRD
+,extractvalue(value(p),'descendant::*/*[@tipo=''TC'' and @sottoTipo="SRVPREPMOB"]/nomeAttributo[.="MSISDN"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') msisdn
+,extractvalue(value(p),'descendant::*/*[@tipo=''TC'' and @sottoTipo="SRVPREPMOB"]/@serviceId','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') serviceIdTC
+,extractvalue(value(p),'descendant::*/*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Portato"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePortato
+,extractvalue(value(p),'descendant::*/*[@tipo=''TE'']/nomeAttributo[.="Numero Voce Precedente"]/@valore','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') numeroVocePrecedente
+,r.id
+from action r, request rr ,action_msg am,
+TABLE ( XMLSEQUENCE(EXTRACT(xmltype(am.message_xml),'/commercialOrder/order/descendant::*[@tipo=''PRD'']','xmlns="http://phoenix.wind.it/esb/CommercialOrder"'))) p
+where r.name='Receive In Order'--'Receive Out Order'
+and r.status='SA'
+--and r.ts_created&gt;sysdate-10
+and RR.ID=r.request_id
+--and rr.root_id=3449071259
+and am.id=r.message_id
+and rownum&lt;3
+--and r.id='3450777873'
+and rr.root_id = (select distinct root_id from detail where value='1-620245797028')</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>STATUS</th><th>NAME</th><th>TS_CREATED</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>BSS_ORDER</th><th>FLAG_SOSPENSIONE</th><th>COUNT_NETWORK</th><th>LOGISTICA</th><th>NUM_PRD_WLESSPREP</th><th>NUM_PRD_WLESS</th><th>NUM_PRD_CPEM</th><th>NUM_PRD_GSS</th><th>INTEGRATIONIDPRD</th><th>ROWIDPRD</th><th>SERVICEIDPRD</th><th>MSISDN</th><th>SERVICEIDTC</th><th>NUMEROVOCEPORTATO</th><th>NUMEROVOCEPRECEDENTE</th><th>ID_1</th></tr><tr><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>19/03/2024 20:13:27,306712</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>4</td><td>0</td><td>0</td><td>0</td><td>1620247392464</td><td>1-7WXRA6Z4</td><td>3298328083</td><td>3298328083</td><td>3298328083</td><td>3200413230</td><td>3298328083</td><td>69358095650</td></tr><tr><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>19/03/2024 20:13:27,306712</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>Y</td><td>0</td><td>0</td><td>N</td><td>4</td><td>0</td><td>0</td><td>0</td><td>1620247392541</td><td>1-7WXRA719</td><td>3299035517</td><td>3299035517</td><td>3299035517</td><td>3339333556</td><td>3299035517</td><td>69358095650</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section3" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE CASI DI ASSISTENZA TECNICA Sostituzione - Kasko Premium (ID: section3)</div><div class="section-description">Descrizione della Sezione: Estrae il cmf-root a partire da una stringa nel payload , dal nome della request e della action</div><div class="section-query">Query PL/SQL:select a.*,substr(d.document_xml,1,20) from action a, request b , request c ,request_doc d
+where 
+1=1 and 
+a.name='Send order odsn' and 
+a.ts_created&gt;sysdate-90 and rownum&lt;3 and
+a.request_id=b.id and
+b.root_id=c.id and 
+d.id=c.document_id and
+d.document_xml like '%Sostituzione - Kasko Premium%' and
+c.name='Sim/Handset Change'</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th><th>SUBSTR(D.DOCUMENT_XML,1,20)</th></tr><tr><td>69295963424</td><td>Send order odsn</td><td>outbound</td><td>SA</td><td>13/03/2024 11:14:31,000000</td><td>13/03/2024 11:14:31,555323</td><td></td><td>13/03/2024 11:14:31,000000</td><td>13/03/2024 11:14:31,000000</td><td>13/03/2024 11:14:36,000000</td><td>1</td><td></td><td>queue.sn.crp.out</td><td>3469007039</td><td>-32938868986</td><td>snow</td><td>7275</td><td>/esb2sap/process/businessService/OrderManagement/bwBSInvioOrdineSNOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr><tr><td>69345999507</td><td>Send order odsn</td><td>outbound</td><td>SA</td><td>18/03/2024 13:53:47,000000</td><td>18/03/2024 13:53:47,325623</td><td></td><td>18/03/2024 13:53:47,000000</td><td>18/03/2024 13:53:47,000000</td><td>18/03/2024 13:53:52,000000</td><td>1</td><td></td><td>queue.sn.crp.out</td><td>3472680084</td><td>-32986382162</td><td>snow</td><td>7275</td><td>/esb2sap/process/businessService/OrderManagement/bwBSInvioOrdineSNOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section4" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE EMF ACTION (ID: section4)</div><div class="section-description">Descrizione della Sezione: Estrae EMF della action  a partire da una stringa nel payload , e id action</div><div class="section-query">Query PL/SQL:select a.*,substr(b.message_xml,1,20)  from action a , action_msg b where b.id=a.message_id 
+and b.message_xml like '%32%' and direction='outbound' and system='sdm' and a.ts_created&gt;sysdate-90 and rownum&lt;3
+--and a.id=69159398618</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th><th>SUBSTR(B.MESSAGE_XML,1,20)</th></tr><tr><td>69697917247</td><td>Modify technical services</td><td>outbound</td><td>SA</td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:49,861836</td><td></td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:51,000000</td><td>23/04/2024 08:38:52,000000</td><td>1</td><td></td><td>queue.sdm.out</td><td>3499305570</td><td>-33318433178</td><td>sdm</td><td>455</td><td>/esb2sdm/process/businessService/bwBSInvioOrdineSdmOut.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr><tr><td>69697966819</td><td>Send PL events to SDM</td><td>outbound</td><td>SA</td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,325979</td><td></td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,000000</td><td>1</td><td></td><td>queue.sdm.out</td><td>3498943463</td><td>-33318479909</td><td>sdm</td><td>5173</td><td>/esb2sdm/process/businessService/bwBSSendPLEvents.process</td><td></td><td></td><td></td><td>&lt;?xml version="1.0"</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section5" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE EMF ACTION (ID: section5)</div><div class="section-description">Descrizione della Sezione: Estrae le informazioni sulla action a partire da id</div><div class="section-query">Query PL/SQL:select * from action a where a.request_id='3498943463' and rownum&lt;3</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>NAME</th><th>DIRECTION</th><th>STATUS</th><th>TS_REQUESTED</th><th>TS_CREATED</th><th>TS_ENQUEUED</th><th>TS_FIRST_START</th><th>TS_START</th><th>TS_END</th><th>PRIORITY</th><th>TS_TODO</th><th>QUEUE</th><th>REQUEST_ID</th><th>MESSAGE_ID</th><th>SYSTEM</th><th>CFG_ID</th><th>HANDLER</th><th>RESPONSE_ID</th><th>ADB_SOURCE</th><th>RESULT</th></tr><tr><td>69697966819</td><td>Send PL events to SDM</td><td>outbound</td><td>SA</td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,325979</td><td></td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,000000</td><td>23/04/2024 08:52:22,000000</td><td>1</td><td></td><td>queue.sdm.out</td><td>3498943463</td><td>-33318479909</td><td>sdm</td><td>5173</td><td>/esb2sdm/process/businessService/bwBSSendPLEvents.process</td><td></td><td></td><td></td></tr><tr><td>69697984847</td><td>Active Contract</td><td>outbound</td><td>SK</td><td>23/04/2024 08:56:56,000000</td><td>23/04/2024 08:56:57,062190</td><td></td><td>23/04/2024 08:56:57,000000</td><td>23/04/2024 08:56:57,000000</td><td>23/04/2024 08:56:57,000000</td><td>1</td><td></td><td>queue.cosy.out</td><td>3498943463</td><td>-33318497037</td><td>cosy</td><td>275</td><td>/esb2cosy/process/businessService/OrderManagement/bwBSNotifyCTROut.process</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section6" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE EMF ACTION (ID: section6)</div><div class="section-description">Descrizione della Sezione: Estrae EMF della action a partire dall'id</div><div class="section-query">Query PL/SQL:select substr(b.message_xml,1,20)  from action a , action_msg b where b.id=a.message_id and a.id=69697917247</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>SUBSTR(B.MESSAGE_XML,1,20)</th></tr><tr><td>&lt;?xml version="1.0"</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section7" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE TIED (ID: section7)</div><div class="section-description">Descrizione della Sezione: Estrazione dei flag che definiscono gli scenari TIED a partire dalla data e dal nome della request</div><div class="section-query">Query PL/SQL:select * from(
+select /* PARALLEL (64) */
+root.id as root_id,
+root.name as root_name,
+root.ts_created as root_ts_created,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrc','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_nrc,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrcOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_nrc_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBArc','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_rc,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBArcOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_rc_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAusg','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_usg,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAusgOld','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') id_BA_usg_Old,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:billingAccount[@id = /ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:servizioMobile/@idBAnrc]/@tipologiaCdf','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') tipologia_Cdf,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile//ns0:servizioMobile/ns0:tracciamentoNoTax/@azione','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') pre_no_tax,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/ns0:esbAttributoGenerico[ns0:nome=''FLAG_IS_MOBILE_TIED_YN'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FLAG_IS_MOBILE_TIED_YN,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''CHANGE_TARIFF_PLAN_TYPE'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') CHANGE_TARIFF_PLAN_TYPE,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''CHANGE_CLASS_TYPE'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') CHANGE_CLASS_TYPE,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_STANDARD_TO_PRENOTAX'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_STANDARD_TO_PRENOTAX,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_STANDARD'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_STANDARD,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_STANDARD_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_STANDARD_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_TIED_TO_STANDARD'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_TIED_TO_STANDARD,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:esbField[ns0:name=''FROM_PRENOTAX_TO_TIED'']/ns0:valore','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') FROM_PRENOTAX_TO_TIED,
+extractvalue((xmltype(doc.document_xml)),'ns0:commercialOrderCns/ns0:order/ns0:mobile/@flagCPE','xmlns:ns0="http://phoenix.wind.it/common/commercialOrderCns/cmfSchema.xsd"') flagCPE
+from
+request root,
+request_doc doc,
+request sdm
+where
+root.ts_created &gt;= to_date('29/04/2024 00:00:00','dd/mm/yyyy hh24:mi:ss') and
+root.name = 'Change Order' and -- Switch Order (subentro),Change Order (cambi offerta) , Change Tariff Plan (cambi piano) ,Activation Order (att), Deactivation Order (cssz), Change Number (?cambio numero)
+root.id = sdm.root_id and
+sdm.name = 'Mobile Provisioning' and
+sdm.status != 'AB' and
+root.document_id = doc.id 
+--and root.id=3455031415
+)
+where 1=1
+and rownum&lt;3</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ROOT_ID</th><th>ROOT_NAME</th><th>ROOT_TS_CREATED</th><th>ID_BA_NRC</th><th>ID_BA_NRC_OLD</th><th>ID_BA_RC</th><th>ID_BA_RC_OLD</th><th>ID_BA_USG</th><th>ID_BA_USG_OLD</th><th>TIPOLOGIA_CDF</th><th>PRE_NO_TAX</th><th>FLAG_IS_MOBILE_TIED_YN</th><th>CHANGE_TARIFF_PLAN_TYPE</th><th>CHANGE_CLASS_TYPE</th><th>FROM_TIED_TO_PRENOTAX</th><th>FROM_PRENOTAX_TO_PRENOTAX</th><th>FROM_STANDARD_TO_PRENOTAX</th><th>FROM_PRENOTAX_TO_STANDARD</th><th>FROM_TIED_TO_TIED</th><th>FROM_STANDARD_TO_TIED</th><th>FROM_TIED_TO_STANDARD</th><th>FROM_PRENOTAX_TO_TIED</th><th>FLAGCPE</th></tr><tr><td>3504449089</td><td>Change Order</td><td>02/05/2024 07:30:06,861341</td><td>P1135583659</td><td>P1135583659</td><td>P1135583659</td><td>P1135583659</td><td>P1135583659</td><td>P1135583659</td><td>Prepagato</td><td></td><td>Y</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>N</td></tr><tr><td>3504208491</td><td>Change Order</td><td>01/05/2024 15:01:38,568815</td><td>P1123174516</td><td>P1123174516</td><td>P1123174516</td><td>P1123174516</td><td>P1123174516</td><td>P1123174516</td><td>Prepagato</td><td></td><td>Y</td><td>STANDARD</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>Y</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section8" class="section"><div class="section-title">Titolo della Sezione: QUERY DISCARD (ID: section8)</div><div class="section-description">Descrizione della Sezione: Estrazione dei dettagli della discard a partire dall'id ordine</div><div class="section-query">Query PL/SQL:select de.*,DI.RECEIVER_NAME,DI.SYSTEM,DI.TS_DISCARD,DI.ID_DISCARD,
+to_char(REGEXP_SUBSTR(error_msg, '(.*?)', 1, 1, NULL, 1)) AS error_message
+from detail de, discard2detail dd, discard di
+where di.id_discard = dd.id_discard
+and dd.id_detail = de.id
+and de.value like  
+( '450%') and rownum&lt;3
+order by ts_discard desc</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>NAME</th><th>VALUE</th><th>POS</th><th>CFG_ID</th><th>ROOT_ID</th><th>RECEIVER_NAME</th><th>SYSTEM</th><th>TS_DISCARD</th><th>ID_DISCARD</th><th>ERROR_MESSAGE</th></tr><tr><td>39946249968</td><td>transaction_id</td><td>4500017b-7b93-427a-98ac-fe329ff7b55f</td><td>0</td><td>2</td><td></td><td>bwRecDocumentCheck</td><td>cvp</td><td>31/01/2024 19:07:03,845000</td><td>261326070</td><td></td></tr><tr><td>37826199313</td><td>transaction_id</td><td>45000049-e8cf-4a2b-bc25-a28a2a39934b</td><td>0</td><td>2</td><td></td><td>bwRecDocumentCheck</td><td>cvp</td><td>26/04/2023 15:00:17,863000</td><td>254933143</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section9" class="section"><div class="section-title">Titolo della Sezione: QUERY PER ESTRAZIONE OLI SU ESB (ID: section9)</div><div class="section-description">Descrizione della Sezione: Estrae OLI in maniera gerarchica a partire dall'ordine</div><div class="section-query">Query PL/SQL:select distinct
+zz.req_ts_created,level livello,
+DECODE (LEVEL,
+                   1, zz.TIPO||'-'||zz.sottotipo,
+                   2, '|__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   3, '    |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   4, '       |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   5, '          |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   '             |__ ' || zz.TIPO||'-'||zz.sottotipo)
+              tipo, 
+zz.azione,
+zz.sottoTipo,
+zz.componentRoot,
+zz.id,
+zz.integrationid,
+zz.idPrice,
+zz.mdf,
+zz.codicePs,
+zz.descrizionePS,          
+zz.componentpadre2,
+zz.rcOverridePrice,
+zz.idCommercialOrder,
+zz.tipo_ordine,
+zz.sottotipo_ordine,
+zz.causale_ordine,
+zz.req_id,zz.req_status,zz.req_name,
+zz.iccid,
+zz.iccidOld,
+zz.msisdn,
+zz.msisdnOld
+ from (
+select 
+r.id req_id,r.status req_status,r.name req_name,r.ts_created req_ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@idCommercialOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as idCommercialOrder,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+case when p.tipo='PRD' then null else p.componentPadre end as componentpadre2 ,
+p.*
+from action r, request rr ,action_msg am
+,XMLTable(xmlnamespaces( 
+default 'http://phoenix.wind.it/esb/CommercialOrder' 
+),
+              'commercialOrder/order//lineItem'
+              PASSING XMLTYPE(am.message_xml)
+              COLUMNS
+                azione VARCHAR2(50) PATH '@azione'
+                ,integrationId VARCHAR2(50) PATH '@integrationId'
+                ,componentRoot VARCHAR2(50) PATH '@componentRoot'
+                ,componentPadre VARCHAR2(50) PATH '@componentPadre'
+                ,descrizionePS VARCHAR2(50) PATH '@descrizionePS'
+                ,mdf VARCHAR2(50) PATH '@mdf'
+                ,idPrice VARCHAR2(50) PATH '@idPrice'
+                ,id VARCHAR2(50) PATH '@id'
+                ,tipo VARCHAR2(50) PATH '@tipo'
+                 ,sottoTipo VARCHAR2(50) PATH '@sottoTipo'
+                 ,codicePs VARCHAR2(50) PATH '@codicePs'
+                 ,rcOverridePrice VARCHAR2(50) PATH '@rcOverridePrice'
+                 ,iccid  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "ICCID")]/@valore'
+                 ,iccidOld  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "ICCID")]/@valorePrecedente'
+                 ,msisdn  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "MSISDN")]/@valore'
+                 ,msisdnOld  VARCHAR2(50) PATH 'nomeAttributo[contains(text(), "MSISDN")]/@valorePrecedente'
+                ) p,
+(SELECT a.name as act_name,a.request_id req_root_id
+                               FROM action a, cfg_action b
+                              WHERE a.request_id IN
+                                       (SELECT DISTINCT root_id
+                                          FROM detail
+                                         WHERE VALUE IN (
+--select id from tmp_ordini_com where stato ='dl'
+'1-620245797028'
+))
+                                    AND b.id = a.cfg_id
+                                    AND b.endpoint = 'queue.siebel.crp.om.in') cfg_det                
+where 
+r.name = cfg_det.act_name
+and RR.ID=r.request_id
+and am.id=r.message_id
+and rr.root_id =  cfg_det.req_root_id 
+) zz  
+START WITH 
+zz.componentPadre2 is null 
+CONNECT BY PRIOR  zz.integrationid=zz.componentPadre2
+order by integrationId, idCommercialOrder,level</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>REQ_TS_CREATED</th><th>LIVELLO</th><th>TIPO</th><th>AZIONE</th><th>SOTTOTIPO</th><th>COMPONENTROOT</th><th>ID</th><th>INTEGRATIONID</th><th>IDPRICE</th><th>MDF</th><th>CODICEPS</th><th>DESCRIZIONEPS</th><th>COMPONENTPADRE2</th><th>RCOVERRIDEPRICE</th><th>IDCOMMERCIALORDER</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>REQ_ID</th><th>REQ_STATUS</th><th>REQ_NAME</th><th>ICCID</th><th>ICCIDOLD</th><th>MSISDN</th><th>MSISDNOLD</th></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392464</td><td>1-7WXRA6Z4</td><td>1620247392464</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392464</td><td>1-7WXRA6Z6</td><td>1620247392466</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392464</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538910</td><td>8939880845127538910</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392464</td><td>1-7WXRA6ZN</td><td>1620247392483</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392464</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3298328083</td><td>3298328083</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392464</td><td>1-7WXRA6ZU</td><td>1620247392490</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392464</td><td>1-7WXRA6ZV</td><td>1620247392491</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392464</td><td>1-7WXRA6ZW</td><td>1620247392492</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392464</td><td>1-7WXRA6ZZ</td><td>1620247392495</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392464</td><td>1-7WXRA700</td><td>1620247392496</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392464</td><td>1-7WXRA704</td><td>1620247392500</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392464</td><td>1-7WXRA711</td><td>1620247392533</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392464</td><td>1-7WXRA712</td><td>1620247392534</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392464</td><td>1-7WXRA713</td><td>1620247392535</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA714</td><td>1620247392536</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA715</td><td>1620247392537</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA716</td><td>1620247392538</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392464</td><td>1-7WXRA717</td><td>1620247392539</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA718</td><td>1620247392540</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392539</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392541</td><td>1-7WXRA719</td><td>1620247392541</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392541</td><td>1-7WXRA71B</td><td>1620247392543</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392541</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538928</td><td>8939880845127538928</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392541</td><td>1-7WXRA71S</td><td>1620247392560</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392541</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3299035517</td><td>3299035517</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392541</td><td>1-7WXRA71Z</td><td>1620247392567</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392541</td><td>1-7WXRA720</td><td>1620247392568</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392541</td><td>1-7WXRA721</td><td>1620247392569</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392541</td><td>1-7WXRA724</td><td>1620247392572</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392541</td><td>1-7WXRA725</td><td>1620247392573</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392541</td><td>1-7WXRA729</td><td>1620247392577</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392541</td><td>1-7WXRA736</td><td>1620247392610</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392541</td><td>1-7WXRA737</td><td>1620247392611</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392541</td><td>1-7WXRA738</td><td>1620247392612</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA739</td><td>1620247392613</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73A</td><td>1620247392614</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73B</td><td>1620247392615</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392541</td><td>1-7WXRA73C</td><td>1620247392616</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73D</td><td>1620247392617</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392616</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392618</td><td>1-7WXRA73E</td><td>1620247392618</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392618</td><td>1-7WXRA73G</td><td>1620247392620</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392618</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538936</td><td>8939880845127538936</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392618</td><td>1-7WXRA73X</td><td>1620247392637</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392618</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3289861397</td><td>3289861397</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392618</td><td>1-7WXRA744</td><td>1620247392644</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392618</td><td>1-7WXRA745</td><td>1620247392645</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392618</td><td>1-7WXRA746</td><td>1620247392646</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392618</td><td>1-7WXRA749</td><td>1620247392649</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392618</td><td>1-7WXRA74A</td><td>1620247392650</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392618</td><td>1-7WXRA74E</td><td>1620247392654</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392618</td><td>1-7WXRA75B</td><td>1620247392687</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392618</td><td>1-7WXRA75C</td><td>1620247392688</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392618</td><td>1-7WXRA75D</td><td>1620247392689</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75E</td><td>1620247392690</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75F</td><td>1620247392691</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75G</td><td>1620247392692</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392618</td><td>1-7WXRA75H</td><td>1620247392693</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75I</td><td>1620247392694</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392693</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392695</td><td>1-7WXRA75J</td><td>1620247392695</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392695</td><td>1-7WXRA75L</td><td>1620247392697</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392695</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538951</td><td>8939880845127538951</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392695</td><td>1-7WXRA762</td><td>1620247392714</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392695</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392695</td><td>1-7WXRA763</td><td>1620247392715</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392695</td><td>1-7WXRA764</td><td>1620247392716</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392695</td><td>1-7WXRA765</td><td>1620247392717</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392695</td><td>1-7WXRA768</td><td>1620247392720</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392695</td><td>1-7WXRA769</td><td>1620247392721</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392695</td><td>1-7WXRA76A</td><td>1620247392722</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392695</td><td>1-7WXRA777</td><td>1620247392755</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392695</td><td>1-7WXRA778</td><td>1620247392756</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392695</td><td>1-7WXRA779</td><td>1620247392757</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77A</td><td>1620247392758</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77B</td><td>1620247392759</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77C</td><td>1620247392760</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392695</td><td>1-7WXRA77D</td><td>1620247392761</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77E</td><td>1620247392762</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392761</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392464</td><td>1-7WXRT7KV</td><td>1620248279711</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392541</td><td>1-7WXRT7L4</td><td>1620248279720</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392618</td><td>1-7WXRT7LD</td><td>1620248279729</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392695</td><td>1-7WXRT7LM</td><td>1620248279738</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392464</td><td>1-7WXRT7MG</td><td>1620248279768</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392541</td><td>1-7WXRT7N9</td><td>1620248279797</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392618</td><td>1-7WXRT7NS</td><td>1620248279816</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392695</td><td>1-7WXRT7OB</td><td>1620248279835</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section10" class="section"><div class="section-title">Titolo della Sezione: STORICO : QUERY PER ESTRAZIONE OLI SU ESB  (ID: section10)</div><div class="section-description">Descrizione della Sezione: Estrae OLI in maniera gerarchica a partire dall'ordine</div><div class="section-query">Query PL/SQL:select 
+zz.req_ts_created,
+DECODE (LEVEL,
+                   1, zz.TIPO||'-'||zz.sottotipo,
+                   2, '|__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   3, '    |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   4, '       |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   5, '          |__ ' || zz.TIPO||'-'||zz.sottotipo,
+                   '             |__ ' || zz.TIPO||'-'||zz.sottotipo)
+              tipo, 
+zz.azione,
+zz.sottoTipo,
+zz.componentRoot,
+zz.id,
+zz.integrationid,
+zz.idPrice,
+zz.mdf,
+zz.codicePs,
+zz.descrizionePS,          
+zz.componentpadre2,
+zz.rcOverridePrice,
+zz.idCommercialOrder,
+zz.tipo_ordine,
+zz.sottotipo_ordine,
+zz.causale_ordine,
+zz.req_id,zz.req_status,zz.req_name from (
+select 
+r.id req_id,r.status req_status,r.name req_name,r.ts_created req_ts_created,
+extractValue(xmltype(message_xml),'commercialOrder/order/@idCommercialOrder','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as idCommercialOrder,
+extractValue(xmltype(message_xml),'commercialOrder/order/@tipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"')as tipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@sottotipo','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as sottotipo_ordine,
+extractValue(xmltype(message_xml),'commercialOrder/order/@causaleOrdine','xmlns="http://phoenix.wind.it/esb/CommercialOrder"') as causale_ordine,
+case when p.tipo='PRD' then null else p.componentPadre end as componentpadre2 ,
+p.*
+from action_hs r, request_hs rr ,action_msg_hs am
+,XMLTable(xmlnamespaces( 
+default 'http://phoenix.wind.it/esb/CommercialOrder' 
+),
+              'commercialOrder/order//lineItem'
+              PASSING XMLTYPE(am.message_xml)
+              COLUMNS
+                azione VARCHAR2(50) PATH '@azione'
+                ,integrationId VARCHAR2(50) PATH '@integrationId'
+                ,componentRoot VARCHAR2(50) PATH '@componentRoot'
+                ,componentPadre VARCHAR2(50) PATH '@componentPadre'
+                ,descrizionePS VARCHAR2(50) PATH '@descrizionePS'
+                ,mdf VARCHAR2(50) PATH '@mdf'
+                ,idPrice VARCHAR2(50) PATH '@idPrice'
+                ,id VARCHAR2(50) PATH '@id'
+                ,tipo VARCHAR2(50) PATH '@tipo'
+                 ,sottoTipo VARCHAR2(50) PATH '@sottoTipo'
+                 ,codicePs VARCHAR2(50) PATH '@codicePs'
+                 ,rcOverridePrice VARCHAR2(50) PATH '@rcOverridePrice'
+                ) p           
+where 
+r.name = 'Receive Activation Order'
+and RR.ID=r.request_id
+and am.id=r.message_id
+and rr.root_id in 
+ (SELECT DISTINCT root_id
+                                          FROM detail_hs
+                                         WHERE VALUE IN (
+                                             --   '1-619650892429', --INC7181401 roberti problema legato alla chiamata della procedura dei cpe su siebel e assenza del cdf =&gt; indirizzatoa crm 
+'1-605924592287'
+)
+) 
+) zz  
+START WITH 
+zz.componentPadre2 is null 
+CONNECT BY PRIOR  zz.integrationid=zz.componentPadre2
+--order by idcommercialorder,level</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>REQ_TS_CREATED</th><th>LIVELLO</th><th>TIPO</th><th>AZIONE</th><th>SOTTOTIPO</th><th>COMPONENTROOT</th><th>ID</th><th>INTEGRATIONID</th><th>IDPRICE</th><th>MDF</th><th>CODICEPS</th><th>DESCRIZIONEPS</th><th>COMPONENTPADRE2</th><th>RCOVERRIDEPRICE</th><th>IDCOMMERCIALORDER</th><th>TIPO_ORDINE</th><th>SOTTOTIPO_ORDINE</th><th>CAUSALE_ORDINE</th><th>REQ_ID</th><th>REQ_STATUS</th><th>REQ_NAME</th><th>ICCID</th><th>ICCIDOLD</th><th>MSISDN</th><th>MSISDNOLD</th></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392464</td><td>1-7WXRA6Z4</td><td>1620247392464</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392464</td><td>1-7WXRA6Z6</td><td>1620247392466</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392464</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538910</td><td>8939880845127538910</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392464</td><td>1-7WXRA6ZN</td><td>1620247392483</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392464</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3298328083</td><td>3298328083</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392464</td><td>1-7WXRA6ZU</td><td>1620247392490</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392464</td><td>1-7WXRA6ZV</td><td>1620247392491</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392464</td><td>1-7WXRA6ZW</td><td>1620247392492</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392464</td><td>1-7WXRA6ZZ</td><td>1620247392495</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392464</td><td>1-7WXRA700</td><td>1620247392496</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392464</td><td>1-7WXRA704</td><td>1620247392500</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392464</td><td>1-7WXRA711</td><td>1620247392533</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392464</td><td>1-7WXRA712</td><td>1620247392534</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392464</td><td>1-7WXRA713</td><td>1620247392535</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA714</td><td>1620247392536</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA715</td><td>1620247392537</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA716</td><td>1620247392538</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392464</td><td>1-7WXRA717</td><td>1620247392539</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392464</td><td>1-7WXRA718</td><td>1620247392540</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392539</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392541</td><td>1-7WXRA719</td><td>1620247392541</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392541</td><td>1-7WXRA71B</td><td>1620247392543</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392541</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538928</td><td>8939880845127538928</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392541</td><td>1-7WXRA71S</td><td>1620247392560</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392541</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3299035517</td><td>3299035517</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392541</td><td>1-7WXRA71Z</td><td>1620247392567</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392541</td><td>1-7WXRA720</td><td>1620247392568</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392541</td><td>1-7WXRA721</td><td>1620247392569</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392541</td><td>1-7WXRA724</td><td>1620247392572</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392541</td><td>1-7WXRA725</td><td>1620247392573</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392541</td><td>1-7WXRA729</td><td>1620247392577</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392541</td><td>1-7WXRA736</td><td>1620247392610</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392541</td><td>1-7WXRA737</td><td>1620247392611</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392541</td><td>1-7WXRA738</td><td>1620247392612</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA739</td><td>1620247392613</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73A</td><td>1620247392614</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73B</td><td>1620247392615</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392541</td><td>1-7WXRA73C</td><td>1620247392616</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392541</td><td>1-7WXRA73D</td><td>1620247392617</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392616</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392618</td><td>1-7WXRA73E</td><td>1620247392618</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392618</td><td>1-7WXRA73G</td><td>1620247392620</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392618</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538936</td><td>8939880845127538936</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392618</td><td>1-7WXRA73X</td><td>1620247392637</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392618</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td>3289861397</td><td>3289861397</td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392618</td><td>1-7WXRA744</td><td>1620247392644</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392618</td><td>1-7WXRA745</td><td>1620247392645</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392618</td><td>1-7WXRA746</td><td>1620247392646</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392618</td><td>1-7WXRA749</td><td>1620247392649</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392618</td><td>1-7WXRA74A</td><td>1620247392650</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392618</td><td>1-7WXRA74E</td><td>1620247392654</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392618</td><td>1-7WXRA75B</td><td>1620247392687</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392618</td><td>1-7WXRA75C</td><td>1620247392688</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392618</td><td>1-7WXRA75D</td><td>1620247392689</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75E</td><td>1620247392690</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75F</td><td>1620247392691</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75G</td><td>1620247392692</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392618</td><td>1-7WXRA75H</td><td>1620247392693</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392618</td><td>1-7WXRA75I</td><td>1620247392694</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392693</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>1</td><td>PRD-WLESSPREPAG</td><td>Add</td><td>WLESSPREPAG</td><td>1620247392695</td><td>1-7WXRA75J</td><td>1620247392695</td><td></td><td>PRENOTAX</td><td>PHX00032</td><td>Mobile Ricaricabile</td><td></td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-ACCPREPMOB</td><td>Add</td><td>ACCPREPMOB</td><td>1620247392695</td><td>1-7WXRA75L</td><td>1620247392697</td><td></td><td>PRENOTAX</td><td>PHX00033</td><td>Accesso Mobile Ricaricabile</td><td>1620247392695</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td>8939880845127538951</td><td>8939880845127538951</td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>2</td><td>|__ TC-SRVPREPMOB</td><td>Add</td><td>SRVPREPMOB</td><td>1620247392695</td><td>1-7WXRA762</td><td>1620247392714</td><td></td><td>PRENOTAX</td><td>PHX00034</td><td>Servizio Mobile Ricaricabile</td><td>1620247392695</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SROMINT</td><td>Add</td><td>SROMINT</td><td>1620247392695</td><td>1-7WXRA763</td><td>1620247392715</td><td></td><td>PRENOTAX</td><td>PHX00039</td><td>Servizio Roaming Internazionale</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SCHMINT</td><td>Add</td><td>SCHMINT</td><td>1620247392695</td><td>1-7WXRA764</td><td>1620247392716</td><td></td><td>PRENOTAX</td><td>PHX00040</td><td>Servizio Chiamate Internazionali</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSGRTEL</td><td>Add</td><td>SSGRTEL</td><td>1620247392695</td><td>1-7WXRA765</td><td>1620247392717</td><td></td><td>PRENOTAX</td><td>PHX00041</td><td>Servizio Segreteria Telefonica</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SSMSORG</td><td>Add</td><td>SSMSORG</td><td>1620247392695</td><td>1-7WXRA768</td><td>1620247392720</td><td></td><td>PRENOTAX</td><td>PHX00042</td><td>Servizio SMS Originati</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-RAS</td><td>Add</td><td>RAS</td><td>1620247392695</td><td>1-7WXRA769</td><td>1620247392721</td><td></td><td></td><td>PHX00089</td><td>Ricarica Automatica a Soglia</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MNPIN</td><td>Add</td><td>MNPIN</td><td>1620247392695</td><td>1-7WXRA76A</td><td>1620247392722</td><td></td><td></td><td>PHX30009</td><td>Dati Richiesta MNP</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-INTWAPBIZ</td><td>Add</td><td>INTWAPBIZ</td><td>1620247392695</td><td>1-7WXRA777</td><td>1620247392755</td><td></td><td>PRENOTAX</td><td>PHX30014</td><td>Internet BIZ/Wap BIZ</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-MMS</td><td>Add</td><td>MMS</td><td>1620247392695</td><td>1-7WXRA778</td><td>1620247392756</td><td></td><td></td><td>PHX30017</td><td>MMS</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-PNTF</td><td>Add</td><td>PNTF</td><td>1620247392695</td><td>1-7WXRA779</td><td>1620247392757</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>PHX70087</td><td>SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77A</td><td>1620247392758</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>PHX70088</td><td>Promozione 4% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77B</td><td>1620247392759</td><td>ID_PRICE_118</td><td>PRENOTAX</td><td>PHX70089</td><td>Promozione 12% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77C</td><td>1620247392760</td><td>ID_PRICE_119</td><td>PRENOTAX</td><td>PHX70090</td><td>Promozione 20% SUPER Unlimited</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-SES</td><td>Add</td><td>SES</td><td>1620247392695</td><td>1-7WXRA77D</td><td>1620247392761</td><td></td><td></td><td>PHX80093</td><td>Secure Web Mobile Pre</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>4</td><td>|__ PC-OPZ</td><td>Add</td><td>OPZ</td><td>1620247392695</td><td>1-7WXRA77E</td><td>1620247392762</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td>PHX80101</td><td>PC Secure Web Mobile Pre</td><td>1620247392761</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392464</td><td>1-7WXRT7KV</td><td>1620248279711</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392541</td><td>1-7WXRT7L4</td><td>1620248279720</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392618</td><td>1-7WXRT7LD</td><td>1620248279729</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-LTE</td><td>Add</td><td>LTE</td><td>1620247392695</td><td>1-7WXRT7LM</td><td>1620248279738</td><td></td><td></td><td>PHX50805</td><td>Servizio LTE</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392464</td><td>1-7WXRT7MG</td><td>1620248279768</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392483</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392541</td><td>1-7WXRT7N9</td><td>1620248279797</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392560</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392618</td><td>1-7WXRT7NS</td><td>1620248279816</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392637</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td><td></td><td></td><td></td><td></td></tr><tr><td>19/03/2024 20:13:27,306712</td><td>3</td><td>|__ TE-5GPRE</td><td>Add</td><td>5GPRE</td><td>1620247392695</td><td>1-7WXRT7OB</td><td>1620248279835</td><td></td><td></td><td>PHX70278</td><td>Opzione 5G Ricaricabile</td><td>1620247392714</td><td></td><td>1-620245797028</td><td>Attivazione</td><td>Attivazione</td><td>Prima Attivazione</td><td>69358095650</td><td>SA</td><td>Receive In Order</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section11" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE VERSO COMBILLING (ID: section11)</div><div class="section-description">Descrizione della Sezione: Query per estrazione oggetti propagati al billing</div><div class="section-query">Query PL/SQL:SELECT  a.id,
+a.status,
+a.name as act_name,
+a.request_id req_root_id,
+p.*
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:numeroTelefono','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as numeroTelefono
+,extractValue(xmltype(d.message_xml),'/ns0:activateServiceIstance/ns0:serviceIstance/ns0:extIdSI','xmlns:ns0="http://billing.wind.it/esb/OrderManagement"')as extIdSI
+FROM action a, request c,action_msg d,
+XMLTable(xmlnamespaces( 
+default 'http://billing.wind.it/esb/OrderManagement' 
+),
+              '/activateServiceIstance/serviceIstance//billingElement'
+              PASSING XMLTYPE(d.message_xml)
+              COLUMNS
+                extIdBE VARCHAR2(50) PATH 'extIdBE'
+                ,idBE VARCHAR2(50) PATH 'idBE'
+                ,idPrice VARCHAR2(50) PATH 'idPrice'
+                ,mdf VARCHAR2(50) PATH 'mdf'
+                ,idOrdine VARCHAR2(50) PATH 'idOrdine'
+                ) p           
+                WHERE 
+                              c.id=a.request_id and
+                              c.root_id IN
+                                       (SELECT DISTINCT root_id
+                                          FROM detail
+                                         WHERE VALUE IN (
+                                                 '1-619650892429'                                        )
+        ) and a.system='kenan' and a.direction='outbound' and
+        d.id=a.message_id</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>STATUS</th><th>ACT_NAME</th><th>REQ_ROOT_ID</th><th>EXTIDBE</th><th>IDBE</th><th>IDPRICE</th><th>MDF</th><th>IDORDINE</th><th>NUMEROTELEFONO</th><th>EXTIDSI</th></tr><tr><td>69297350961</td><td>SA</td><td>Active Service Instance</td><td>3469116425</td><td>1619735059867</td><td>PHX70087</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>1-619650892429</td><td>3274515850</td><td>1619735059849</td></tr><tr><td>69297350961</td><td>SA</td><td>Active Service Instance</td><td>3469116425</td><td>1619735059934</td><td>PHX70088</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>1-619650892429</td><td>3274515850</td><td>1619735059849</td></tr><tr><td>69297350961</td><td>SA</td><td>Active Service Instance</td><td>3469116425</td><td>1619735059935</td><td>PHX70092</td><td>ID_PRICE_121</td><td>PRENOTAX</td><td>1-619650892429</td><td>3274515850</td><td>1619735059849</td></tr><tr><td>69297350961</td><td>SA</td><td>Active Service Instance</td><td>3469116425</td><td>1619735059869</td><td>PHX80101</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td></td><td>3274515850</td><td>1619735059849</td></tr><tr><td>69297350634</td><td>SA</td><td>Active Service Instance</td><td>3469116392</td><td>1619735059928</td><td>PHX70284</td><td>ID_PRICE_483</td><td>POSTPAGATA</td><td>1-619650892429</td><td>3273656103</td><td>1619734737358</td></tr><tr><td>69297350785</td><td>SA</td><td>Active Service Instance</td><td>3469116405</td><td>1619735059671</td><td>PHX70087</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>1-619650892429</td><td>3882566823</td><td>1619735059653</td></tr><tr><td>69297350785</td><td>SA</td><td>Active Service Instance</td><td>3469116405</td><td>1619735059930</td><td>PHX70088</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>1-619650892429</td><td>3882566823</td><td>1619735059653</td></tr><tr><td>69297350785</td><td>SA</td><td>Active Service Instance</td><td>3469116405</td><td>1619735059931</td><td>PHX70092</td><td>ID_PRICE_121</td><td>PRENOTAX</td><td>1-619650892429</td><td>3882566823</td><td>1619735059653</td></tr><tr><td>69297350785</td><td>SA</td><td>Active Service Instance</td><td>3469116405</td><td>1619735059673</td><td>PHX80101</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td></td><td>3882566823</td><td>1619735059653</td></tr><tr><td>69297350873</td><td>SA</td><td>Active Service Instance</td><td>3469116419</td><td>1619735059823</td><td>PHX70087</td><td>ID_PRICE_66</td><td>PRENOTAX</td><td>1-619650892429</td><td>3884717697</td><td>1619735059805</td></tr><tr><td>69297350873</td><td>SA</td><td>Active Service Instance</td><td>3469116419</td><td>1619735059932</td><td>PHX70088</td><td>ID_PRICE_117</td><td>PRENOTAX</td><td>1-619650892429</td><td>3884717697</td><td>1619735059805</td></tr><tr><td>69297350873</td><td>SA</td><td>Active Service Instance</td><td>3469116419</td><td>1619735059933</td><td>PHX70092</td><td>ID_PRICE_121</td><td>PRENOTAX</td><td>1-619650892429</td><td>3884717697</td><td>1619735059805</td></tr><tr><td>69297350873</td><td>SA</td><td>Active Service Instance</td><td>3469116419</td><td>1619735059825</td><td>PHX80101</td><td>ID_PRICE_4675</td><td>PRENOTAX</td><td></td><td>3884717697</td><td>1619735059805</td></tr><tr><td>69381693689</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737507</td><td>334994</td><td>ID_PRICE_1640</td><td>POSTPAGATA</td><td>1-619650892429</td><td>FWA.w53160143</td><td>1619734737472</td></tr><tr><td>69381693689</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619735059929</td><td>334995</td><td>ID_PRICE_1636</td><td>POSTPAGATA</td><td>1-619650892429</td><td>FWA.w53160143</td><td>1619734737472</td></tr><tr><td>69381693689</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737509</td><td>334997</td><td>ID_PRICE_1563</td><td>POSTPAGATA</td><td>1-619650892429</td><td>FWA.w53160143</td><td>1619734737472</td></tr><tr><td>69381693689</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737506</td><td>PHX70285</td><td>ID_PRICE_4824</td><td>POSTPAGATA</td><td>1-619650892429</td><td>FWA.w53160143</td><td>1619734737472</td></tr><tr><td>69381709634</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737586</td><td>PHX70023</td><td>ID_PRICE_981</td><td>POSTPAGATA</td><td>1-619650892429</td><td>0703513614</td><td>1619734737542</td></tr><tr><td>69381690156</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737528</td><td>335494</td><td>ID_PRICE_1778</td><td>POSTPAGATA</td><td>1-619650892429</td><td>A21619734737517</td><td>1619734737517</td></tr><tr><td>69381690156</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619734737529</td><td>302681</td><td>ID_PRICE_1742</td><td>POSTPAGATA</td><td>1-619650892429</td><td>A21619734737517</td><td>1619734737517</td></tr><tr><td>69381709608</td><td>SA</td><td>Active Service Instance</td><td>3469116435</td><td>1619735059632</td><td>PHX70023</td><td>ID_PRICE_981</td><td>POSTPAGATA</td><td>1-619650892429</td><td>0703513613</td><td>1619734737588</td></tr><tr><td>69361032077</td><td>SA</td><td>Active Service Instance</td><td>3469116378</td><td>1619735059785</td><td>PHX10361</td><td>SIEB_ID_PRICE_4646</td><td>POSTPAGATA</td><td>1-619650892429</td><td></td><td>1619735059732</td></tr><tr><td>69361031871</td><td>SA</td><td>Active Service Instance</td><td>3469116378</td><td>1619735059731</td><td>PHX10361</td><td>SIEB_ID_PRICE_4643</td><td>POSTPAGATA</td><td>1-619650892429</td><td></td><td>1619735059678</td></tr><tr><td>69361032258</td><td>SA</td><td>Active Service Instance</td><td>3469116378</td><td>1619735059927</td><td>PHX10361</td><td>SIEB_ID_PRICE_4643</td><td>POSTPAGATA</td><td>1-619650892429</td><td></td><td>1619735059874</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section12" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE MEDIANTE REGULAR EXPRESSION (ID: section12)</div><div class="section-description">Descrizione della Sezione: Estrazione di un campo dell'action message non ricorsivo</div><div class="section-query">Query PL/SQL:select a.id,a.name,
+        (select to_char(REGEXP_SUBSTR(zz.message_xml, '(.*?)', 1, 1, NULL, 1)) 
+            from action z,action_msg zz 
+                where z.name='Receive mobile provisioning result KO' 
+                and z.request_id=a.request_id 
+                and zz.id=z.message_id 
+                and z.id=(select max(id) from action x where x.name='Receive mobile provisioning result KO' and x.request_id=a.request_id) 
+         ) descr
+        from action a where id in
+        (
+        66078832342,
+66073801202)</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>ID</th><th>NAME</th><th>DESCR</th></tr><tr><td>66073801202</td><td>Modify technical services</td><td>InterfaceVerifyRespFunctionEDA: e' stata ricevuta una risposta negativa '13003'</td></tr><tr><td>66078832342</td><td>Modify technical services</td><td>InterfaceVerifyRespFunctionEDA: e' stata ricevuta una risposta negativa '13003'</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section13" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE RISORSE (ID: section13)</div><div class="section-description">Descrizione della Sezione: Estrazione action verso il mobile resource</div><div class="section-query">Query PL/SQL:select a.name, c.name,b.name from 
+request a, 
+action b,
+request c,
+action_msg d
+where 
+d.id=b.message_id and
+c.root_id=A.ID and
+--c.name='Network' and
+b.request_id=c.id and 
+b.handler like '%mobileResource%' and
+b.system in ('clarify','esb') and 
+a.ts_created&gt;sysdate-70 and
+a.name  in 
+('Change-over'
+/*'In Order',
+'OutOrder', --==&gt; 
+'Extend Order',
+'Sim/Handset Change', --==&gt; 
+'MnpDonor', --==&gt; 
+'Change Number Mnp' --==&gt; 
+*/) and
+rownum&lt;3</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>NAME</th><th>NAME_1</th><th>NAME_2</th></tr><tr><td>Change-over</td><td>Network</td><td>Update SIM</td></tr><tr><td>Change-over</td><td>Network</td><td>Update SIM</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div><div id="section14" class="section"><div class="section-title">Titolo della Sezione: ESTRAZIONE RISORSE (ID: section14)</div><div class="section-description">Descrizione della Sezione: Estrazione action verso billing dalla request id root</div><div class="section-query">Query PL/SQL:select b.name,b.id,a.root_id,b.status,''''||b.id||''',',
+(select distinct value from detail where root_id = a.root_id and name='id_odl_crm') id_ordine
+from request a, action  b
+      where 
+      b.request_id=a.id and 
+--      a.root_id in (     572744,     -1      )       
+      a.root_id in (select distinct root_id from detail where value in       ('1-622831680560'))
+--      and b.status ='SA'
+      and b.system='kenan' 
+     and b.direction='outbound'
+     and b.id not in (-1)
+     and rownum&lt;4</div><div class="section-table"><table style="font-size: 8px;"><tbody><tr class="first-row"><th>NAME</th><th>ID</th><th>ROOT_ID</th><th>STATUS</th><th>''''||B.ID||''','</th><th>ID_ORDINE</th></tr><tr><td>Active Service Instance</td><td>69690794883</td><td>3498806946</td><td>SA</td><td>'69690794883',</td><td>1-622831680560</td></tr><tr><td>Change Billing Element Service Instance</td><td>69709332589</td><td>3498806946</td><td>SA</td><td>'69709332589',</td><td>1-622831680560</td></tr><tr><td>Change Number Service Instance</td><td>69690794278</td><td>3498806946</td><td>SA</td><td>'69690794278',</td><td>1-622831680560</td></tr></tbody></table></div><button class="copy-button">Copia Query PL/SQL</button><button class="edit-button">Modifica Query PL/SQL</button><button class="edit-table-button">Modifica Tabella</button><button class="edit-title-button">Modifica Titolo Sezione</button><button class="edit-description-button">Modifica Descrizione Sezione</button></div></div>
+    <div class="button-container">
+        <button class="add-section-button" onclick="addSection()">Aggiungi Sezione</button>
+        <button class="delete-section-button" onclick="deleteSection()">Elimina Sezione</button>
+		<button class="clear-sections-button" onclick="clearSections()">Ripulisci tutte le sezioni</button>
+		    </div>
+    <script>
+	
+	var sectionCount = 0; // Contatore per l'ID numerico delle sezioni
+	
+	//FUNZIONE CANCELLAZIONE TUTTE SEZIONI
+	//---------------------------------------------------------
+	function clearSections() {
+    var confirmClear = confirm("Sei sicuro di voler eliminare tutte le sezioni?");
+    if (confirmClear) {
+        var sectionsContainer = document.getElementById("sections");
+        sectionsContainer.innerHTML = ""; // Rimuovi tutte le sezioni dall'HTML
+        // Aggiorna l'indice dopo aver rimosso tutte le sezioni
+        updateIndex();
+        // Cancella anche i dati salvati nel localStorage
+        localStorage.removeItem("sections");
+		}
+		sectionCount=0
+	}
+	
+	
+	//FUNZIONE CANCELLAZIONE ID SEZIONE
+	//---------------------------------------------------------
+	function deleteSection() {
+            var sectionId = prompt("Inserisci l'ID della sezione da eliminare:");
+            if (!sectionId) return;
+            var sectionToRemove = document.getElementById(sectionId);
+            if (sectionToRemove) {
+                sectionToRemove.remove();
+                updateIndex(); // Aggiorna l'indice dopo aver rimosso la sezione
+                saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo aver rimosso la sezione
+            } else {
+                alert("La sezione con l'ID specificato non esiste.");
+            }
+        }
+        
+		
+		 
+		
+		//Funzione per SALVARE le sezioni nel localStorage
+		//---------------------------------------------------------
+        function saveSectionsToLocalStorage() {
+            var sections = document.querySelectorAll(".section");
+            var sectionData = [];
+            sections.forEach(function(section) {
+                var sectionId = section.getAttribute("id");
+                var sectionTitle = section.querySelector(".section-title").textContent.replace("Titolo della Sezione: ", "");
+                var sectionDescription = section.querySelector(".section-description").textContent.replace("Descrizione della Sezione: ", "");
+                var sectionQuery = section.querySelector(".section-query").textContent.replace("Query PL/SQL:", "");
+				//var sectionQuery = section.querySelector(".section-query").value;
+                var sectionCsv = section.querySelector(".section-table table").outerHTML;
+                sectionData.push({
+                    id: sectionId,
+                    title: sectionTitle,
+                    description: sectionDescription,
+                    query: sectionQuery,
+                    csv: sectionCsv
+                });
+            });
+            localStorage.setItem("sections", JSON.stringify(sectionData));
+        }
+        
+		
+		// Funzione per LOAD le sezioni dal localStorage
+        //---------------------------------------------------------
+		function loadSectionsFromLocalStorage() {
+            var savedSections = localStorage.getItem("sections");
+			var savedSectionCount = localStorage.getItem("sectionCount");
+			   if (savedSectionCount) {
+					// Imposta il valore di sectionCount al valore salvato
+					sectionCount = parseInt(savedSectionCount);
+					}
+            if (savedSections) {
+                var sectionsContainer = document.getElementById("sections");
+                sectionsContainer.innerHTML = "";
+                var sectionData = JSON.parse(savedSections);
+                sectionData.forEach(function(data) {
+                    var newSection = document.createElement("div");
+                    newSection.setAttribute("id", data.id);
+                    newSection.classList.add("section");
+                    var titleElement = document.createElement("div");
+                    titleElement.classList.add("section-title");
+                    titleElement.textContent = "Titolo della Sezione: " + data.title ;
+                    var descriptionElement = document.createElement("div");
+                    descriptionElement.classList.add("section-description");
+                    descriptionElement.textContent = "Descrizione della Sezione: " + data.description;
+
+					
+					
+					//sizing text area QUERY
+					var queryElement = document.createElement("div");
+                    queryElement.classList.add("section-query");
+                    queryElement.textContent = "Query PL/SQL:" + data.query; // Imposto il testo come contenuto testuale
+
+					
+					var tableElement = document.createElement("div");
+                    tableElement.classList.add("section-table");
+                    tableElement.innerHTML = data.csv;
+                    var copyButton = document.createElement("button");
+                    copyButton.classList.add("copy-button");
+                    copyButton.textContent = "Copia Query PL/SQL";
+                    copyButton.addEventListener("click", function() {
+                        copyToClipboard(data.query);
+                    });
+                    var editButton = document.createElement("button");
+                    editButton.classList.add("edit-button");
+                    editButton.textContent = "Modifica Query PL/SQL";
+                    editButton.addEventListener("click", function() {
+                        var newQuery = prompt("Modifica la query PL/SQL:", data.query);
+                        if (newQuery !== null) {
+                            data.query = newQuery; // Assegna la nuova query a data.query
+                            queryElement.innerHTML = "Query PL/SQL:" + newQuery;
+							//queryElement.textContent = newQuery
+                            copyButton.addEventListener("click", function() {
+                                copyToClipboard(newQuery);
+                            });
+                            saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+                        }
+                    });
+                    var editTableButton = document.createElement("button");
+                    editTableButton.classList.add("edit-table-button");
+                    editTableButton.textContent = "Modifica Tabella";
+                    editTableButton.addEventListener("click", function() {
+                        var newCsv = prompt("Modifica la tabella in formato CSV (utilizza il tab come separatore):", data.csv);
+                        if (newCsv !== null) {
+                            data.csv = newCsv;
+                            tableElement.innerHTML = '';
+                            tableElement.appendChild(parseCsvToTable(newCsv));
+                            saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+                        }
+                    });
+                    var editTitleButton = document.createElement("button");
+                    editTitleButton.classList.add("edit-title-button");
+                    editTitleButton.textContent = "Modifica Titolo Sezione";
+                    editTitleButton.addEventListener("click", function() {
+                        var newTitle = prompt("Modifica il titolo della sezione:", data.title);
+                        if (newTitle !== null) {
+                            data.title = newTitle;
+                            titleElement.textContent = "Titolo della Sezione: " + newTitle ;
+                            updateIndex();
+                            saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+                        }
+                    });
+                    var editDescriptionButton = document.createElement("button");
+                    editDescriptionButton.classList.add("edit-description-button");
+                    editDescriptionButton.textContent = "Modifica Descrizione Sezione";
+                    editDescriptionButton.addEventListener("click", function() {
+                        var newDescription = prompt("Modifica la descrizione della sezione:", data.description);
+                        if (newDescription !== null) {
+                            data.description = newDescription;
+                            descriptionElement.textContent = "Descrizione della Sezione: " + newDescription;
+                            updateIndex();
+                            saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+                        }
+                    });
+                    newSection.appendChild(titleElement);
+                    newSection.appendChild(descriptionElement);
+                    newSection.appendChild(queryElement);
+                    newSection.appendChild(tableElement);
+                    newSection.appendChild(copyButton);
+                    newSection.appendChild(editButton);
+                    newSection.appendChild(editTableButton);
+                    newSection.appendChild(editTitleButton);
+                    newSection.appendChild(editDescriptionButton);
+                    sectionsContainer.appendChild(newSection);
+                });
+            }
+			updateIndex();
+        }
+
+		
+		// Funzione per CREATE sezione
+        //---------------------------------------------------------
+        function addSection() {
+            var sectionTitle = prompt("Inserisci il titolo della sezione:");
+            if (!sectionTitle) return;
+            var sectionDescription = prompt("Inserisci la descrizione della sezione:");
+            if (!sectionDescription) return;
+            var sectionQuery = prompt("Inserisci la query PL/SQL:"); //acquisisce in input 
+			var sectionQuery = document.querySelector(".section-query").value; //acquisice da una compoente html textarea
+            if (!sectionQuery) return;
+            var sectionCsv = prompt("Inserisci la tabella in formato CSV (utilizza il tab come separatore):");
+            if (!sectionCsv) return;
+            var sectionsContainer = document.getElementById("sections");
+            var newSection = document.createElement("div");
+			sectionCount++; // Incrementa il contatore per l'ID numerico della sezione
+			localStorage.setItem("sectionCount", sectionCount);
+			var sectionId = "section" + sectionCount; // Genera l'ID numerico della sezione
+            newSection.setAttribute('id', sectionId);
+            newSection.classList.add("section");
+            var titleElement = document.createElement("div");
+            titleElement.classList.add("section-title");
+            titleElement.textContent = "Titolo della Sezione: " + sectionTitle + " (ID: " + sectionId + ")";
+            var descriptionElement = document.createElement("div");
+            descriptionElement.classList.add("section-description");
+            descriptionElement.textContent = "Descrizione della Sezione: " + sectionDescription;
+            
+			
+			//sizing text area QUERY
+		
+			var queryElement = document.createElement("div");
+            queryElement.classList.add("section-query");
+            queryElement.innerHTML = "Query PL/SQL:" + sectionQuery;
+
+						
+			
+			
+			var tableElement = document.createElement("div");
+            tableElement.classList.add("section-table");
+            tableElement.appendChild(parseCsvToTable(sectionCsv));
+            var copyButton = document.createElement("button");
+            copyButton.classList.add("copy-button");
+            copyButton.textContent = "Copia Query PL/SQL";
+            copyButton.addEventListener("click", function() {
+                copyToClipboard(sectionQuery);
+            });
+            var editButton = document.createElement("button");
+            editButton.classList.add("edit-button");
+            editButton.textContent = "Modifica Query PL/SQL";
+            
+			/*
+			editButton.addEventListener("click", function() {
+                var newQuery = prompt("Modifica la query PL/SQL:", sectionQuery);
+                if (newQuery !== null) {
+                    sectionQuery = newQuery; // Assegna la nuova query a sectionQuery
+                    queryElement.innerHTML = "Query PL/SQL:" + newQuery.replace(/\n/g, "<br>");
+                    copyButton.addEventListener("click", function() {
+                        copyToClipboard(newQuery);
+                    });
+                    saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+                }
+            });
+			*/
+			editButton.addEventListener("click", function() {
+                // Modifica il contenuto del textarea
+                sectionQuery = document.querySelector("#" + sectionId + " .section-query").value;
+                queryElement.innerHTML = "Query PL/SQL:" + sectionQuery;
+                copyButton.addEventListener("click", function() {
+                    copyToClipboard(sectionQuery);
+                });
+                saveSectionsToLocalStorage(); // Aggiorna il localStorage dopo la modifica
+            })
+			
+            var editTableButton = document.createElement("button");
+            editTableButton.classList.add("edit-table-button");
+            editTableButton.textContent = "Modifica Tabella";
+            editTableButton.addEventListener("click", function() {
+                var newCsv = prompt("Modifica la tabella in formato CSV (utilizza il tab come separatore):", sectionCsv);
+                if (newCsv !== null) {
+                    sectionCsv = newCsv;
+                    tableElement.innerHTML = '';
+                    tableElement.appendChild(parseCsvToTable(sectionCsv));
+                }
+            });
+            var editTitleButton = document.createElement("button");
+            editTitleButton.classList.add("edit-title-button");
+            editTitleButton.textContent = "Modifica Titolo Sezione";
+            editTitleButton.addEventListener("click", function() {
+                var newTitle = prompt("Modifica il titolo della sezione:", sectionTitle);
+                if (newTitle !== null) {
+                    sectionTitle = newTitle;
+                    titleElement.textContent = "Titolo della Sezione: " + newTitle + " (ID: " + sectionId + ")";
+                    updateIndex();
+                }
+            });
+            var editDescriptionButton = document.createElement("button");
+            editDescriptionButton.classList.add("edit-description-button");
+            editDescriptionButton.textContent = "Modifica Descrizione Sezione";
+            editDescriptionButton.addEventListener("click", function() {
+                var newDescription = prompt("Modifica la descrizione della sezione:", sectionDescription);
+                if (newDescription !== null) {
+                    sectionDescription = newDescription;
+                    descriptionElement.textContent = "Descrizione della Sezione: " + newDescription;
+                    updateIndex();
+                }
+            });
+            newSection.appendChild(titleElement);
+            newSection.appendChild(descriptionElement);
+            newSection.appendChild(queryElement);
+            newSection.appendChild(tableElement);
+            newSection.appendChild(copyButton);
+            newSection.appendChild(editButton);
+            newSection.appendChild(editTableButton);
+            newSection.appendChild(editTitleButton);
+            newSection.appendChild(editDescriptionButton);
+            sectionsContainer.appendChild(newSection);
+            // Aggiungi voce all'indice
+            updateIndex();
+        }
+        
+		
+		// Funzione per parsing csv
+        //---------------------------------------------------------
+		function parseCsvToTable(csv) {
+            var rows = csv.trim().split("\n");
+            var table = document.createElement("table");
+            table.style.fontSize = "8px";
+            rows.forEach(function(row, rowIndex) {
+                var cells = row.split("\t");
+                var tr = document.createElement("tr");
+                cells.forEach(function(cell, cellIndex) {
+                    var cellElement = rowIndex === 0 ? document.createElement("th") : document.createElement("td");
+                    cellElement.textContent = cell.trim();
+                    tr.appendChild(cellElement);
+                });
+                table.appendChild(tr);
+            });
+            // Aggiungi classe alla prima riga per rendere le celle celesti
+            table.querySelector("tr").classList.add("first-row");
+            return table;
+        }
+        
+		// Funzione per copiare testo
+        //---------------------------------------------------------
+		function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert("Testo copiato negli appunti!");
+            }, function() {
+                alert("Errore durante la copia del testo!");
+            });
+        }
+
+		// Funzione per aggiornare indice
+        //---------------------------------------------------------
+		function updateIndex() {
+			var indexList = document.getElementById("index");
+			indexList.innerHTML = ''; // Cancella l'indice attuale
+			var sections = document.querySelectorAll(".section");
+			sections.forEach(function(section) {
+			var sectionId = section.getAttribute("id");
+			var sectionTitle = section.querySelector(".section-title").textContent.replace("Titolo della Sezione: ", "");
+			var sectionDescription = section.querySelector(".section-description").textContent.replace("Descrizione della Sezione: ", "");
+			var sectionItem = document.createElement("li");
+			var sectionLink = document.createElement("a");
+			sectionLink.href = "#" + sectionId;
+			sectionLink.textContent = sectionTitle;
+			sectionItem.appendChild(sectionLink);
+			// Verifica la presenza di sotto-sezioni
+			var subSections = section.querySelectorAll(".section-description");
+			if (subSections.length > 0) {
+				// Aggiungi sottoelenco per le sotto-sezioni
+				var subSectionList = document.createElement("ul");
+				subSections.forEach(function(subSection, index) {
+					var subSectionId = sectionId + "_sub" + (index + 1); // Genera un ID univoco per la sotto-sezione
+					var subSectionText = subSection.textContent.replace("Descrizione della Sezione: ", "");
+					var subSectionItem = document.createElement("li");
+					var subSectionLink = document.createElement("a");
+					subSectionLink.href = "#" + subSectionId;
+					subSectionLink.textContent = subSectionText;
+					subSectionItem.appendChild(subSectionLink);
+					subSectionList.appendChild(subSectionItem);
+				});
+				sectionItem.appendChild(subSectionList);
+			}
+			indexList.appendChild(sectionItem);
+		});
+		// Salvataggio delle modifiche nell'indice nel localStorage
+		saveIndexToLocalStorage();
+}
+
+		
+		// Funzione per salvare indice
+        //---------------------------------------------------------
+		function saveIndexToLocalStorage() {
+		var indexList = document.getElementById("index");
+		var indexItems = indexList.querySelectorAll("li");
+		var indexData = [];
+		// Itera attraverso gli elementi dell'indice e salva le informazioni necessarie
+		indexItems.forEach(function(item) {
+			var sectionId = item.querySelector("a").getAttribute("href").substring(1); // Rimuove il carattere #
+			var sectionTitle = item.querySelector("a").textContent;
+			// Ottieni le sotto-sezioni, se presenti
+			var subSections = item.querySelectorAll("ul li");
+			var subSectionData = [];
+			subSections.forEach(function(subItem) {
+				var subSectionId = subItem.querySelector("a").getAttribute("href").substring(1); // Rimuove il carattere #
+				var subSectionTitle = subItem.querySelector("a").textContent;
+				subSectionData.push({
+					id: subSectionId,
+					title: subSectionTitle
+				});
+			});
+			indexData.push({
+				id: sectionId,
+				title: sectionTitle,
+				subSections: subSectionData
+			});
+		});
+		localStorage.setItem("indexData", JSON.stringify(indexData));
+	}
+
+
+		// Chiamata alla funzione per salvare l'indice nel localStorage prima del refresh della pagina
+		window.addEventListener("beforeunload", saveIndexToLocalStorage);
+        // Chiamata alla funzione per caricare le sezioni al caricamento della pagina
+        window.addEventListener("load", loadSectionsFromLocalStorage);
+        // Chiamata alla funzione per salvare le sezioni prima di chiudere la pagina
+        window.addEventListener("beforeunload", saveSectionsToLocalStorage);
+    </script>
+
+</body></html>
